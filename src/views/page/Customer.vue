@@ -1,0 +1,302 @@
+<template>
+  <div>
+    <!-- 搜索筛选 -->
+    <el-form :inline="true" :model="formInline" class="user-search">
+      <el-form-item label="">
+        <el-input size="small" v-model="formInline.code" placeholder="输入角色"></el-input>
+      </el-form-item>
+      <el-form-item label="">
+        <el-input size="small" v-model="formInline.name" placeholder="输入角色名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+        <el-button size="small" type="primary" icon="el-icon-plus" @click="handleEdit()">添加</el-button>
+      </el-form-item>
+    </el-form>
+    <!--列表-->
+    <el-table size="small" :data="listData.slice((pageparm.currentPage -1) * pageparm.pageSize, pageparm.currentPage * pageparm.pageSize)" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column align="center" prop="code" label="角色" width="225">
+      </el-table-column>
+      <el-table-column align="center" prop="name" label="角色名称" width="225">
+      </el-table-column>
+      <el-table-column align="center" prop="note1" label="角色职务代码" width="225">
+      </el-table-column>
+      <el-table-column align="center" prop="note2" label="备注" width="225">
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="355">
+        <template slot-scope="scope">
+          <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="deletePosition(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页组件 -->
+    <Pagination v-bind:child-msg="pageparm" @callFather="callFather"></Pagination>
+    <!-- 编辑界面 -->
+    <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()">
+      <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm">
+        <el-form-item label="角色" prop="code">
+          <el-input size="small" v-model="editForm.code" auto-complete="off" placeholder="请输入角色" class="comWidth" :disabled="codeDis"></el-input>
+        </el-form-item>
+        <el-form-item label="角色名称" prop="name">
+          <el-input size="small" v-model="editForm.name" auto-complete="off" placeholder="请输入角色名称"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="角色职务代码" prop="note1">
+          <el-input size="small" v-model="editForm.note1" auto-complete="off" placeholder="请输入角色职务代码" class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="note2">
+          <el-input size="small" v-model="editForm.note2" auto-complete="off" placeholder="请输入备注"  class="comWidth"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="closeDialog()">取消</el-button>
+        <el-button size="small" type="primary" :loading="loading" class="title" @click="submitForm('editForm')">保存</el-button>
+      </div>
+    </el-dialog>
+    <!-- 详情界面 -->
+    <el-dialog :title="detailsTitle" :visible.sync="detailsFormVisible" width="30%" @click="closeDialog()">
+      <el-form label-width="120px" :model="editForm" ref="editForm">
+        <el-form-item label="角色" prop="code">
+          <el-input size="small" v-text="editForm.code" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="角色名称" prop="name">
+          <el-input size="small" v-text="editForm.name" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="主管角色代码" prop="note1">
+          <el-input size="small" v-text="editForm.note1" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="note2">
+          <el-input size="small" v-text="editForm.note2" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import {deptList,deptSave,deptUpdate,deptDelete} from '@/api/commonMG.js'
+import Pagination from '@/components/Pagination'
+export default {
+  data() {
+    return {
+      loading: false, //是显示加载
+      editFormVisible: false, //控制编辑页面显示与隐藏
+      detailsFormVisible:false, //控制详情页面显示与隐藏
+      codeDis: false,
+      title: '添加',
+      detailsTitle:'详情',
+      tableName:'Role',
+      editForm: {
+        tableName:'Role',
+        name: '',
+        code: '',
+        note1:'',
+        note2:''
+      },
+      // rules表单验证
+      rules: {
+        name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入角色', trigger: 'blur' }]
+      },
+      formInline: {
+        page: 1,
+        limit: 10,
+        code: '',
+        name: ''
+      },
+      listData: [], //用户数据
+      // 分页参数
+      pageparm: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 10
+      }
+    }
+  },
+  // 注册组件
+  components: {
+    Pagination
+  },
+  /**
+   * 创建完毕
+   */
+  created() {
+    this.getdata(this.formInline)
+  },
+
+  /**
+   * 里面的方法只有被调用才会执行
+   */
+  methods: {
+    // 获取部门数据列表
+    getdata(parameter) {
+      this.loading = true
+      let params = {tableName:this.tableName,code:this.formInline.code,name:this.formInline.name}
+      deptList(params).then(res =>{
+        this.loading = false
+        if(res.success == false){
+          this.$message({
+               type: 'info',
+               message: res.errors
+          })
+        }else{
+          this.listData = res.result;
+          this.pageparm.currentPage = this.formInline.page
+          this.pageparm.pageSize = this.formInline.limit
+          this.pageparm.total = res.total
+        }
+      }).catch(error =>{
+        this.loading = false
+      })
+    },
+    // 分页插件事件
+    callFather(parm) {
+      this.formInline.page = parm.currentPage
+      this.formInline.limit = parm.pageSize
+      this.getdata(this.formInline)
+    },
+    // 搜索事件
+    search() {
+      this.getdata(this.formInline)
+    },
+    //显示编辑界面
+    handleEdit: function(index, row) {
+      this.editFormVisible = true
+      if (row != undefined && row != 'undefined') {
+        this.title = '修改'
+        this.codeDis = true
+        this.editForm.name = row.name
+        this.editForm.code = row.code
+        this.editForm.note1 = row.note1
+        this.editForm.note2 = row.note2
+      } else {
+        this.title = '添加'
+        this.codeDis = false
+        this.editForm.name = ''
+        this.editForm.code = ''
+        this.editForm.note1 = ''
+        this.editForm.note2 = ''
+      }
+    },
+    //显示详情页面
+    handleView:function(index,row){
+      this.detailsFormVisible = true
+      this.editForm.name = row.name
+      this.editForm.code = row.code
+      this.editForm.note1 = row.note1
+      this.editForm.note2 = row.note2
+    },
+    // 增加页面保存方法
+    submitForm(editData) {
+      if(this.title == '添加'){
+        this.$refs[editData].validate(valid => {
+          if (valid) {
+            deptSave(this.editForm)
+              .then(res => {
+                this.editFormVisible = false
+                this.loading = false
+                if (res.success) {
+                  this.getdata(this.formInline)
+                  this.$message({
+                    type: 'success',
+                    message: '角色保存成功！'
+                  })
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: res.msg
+                  })
+                }
+              })
+              .catch(err => {
+                this.editFormVisible = false
+                this.loading = false
+                this.$message.error('角色保存失败，请稍后再试！')
+              })
+          } else {
+            return false
+          }
+        })
+      }else{
+        this.$refs[editData].validate(valid => {
+          if (valid) {
+            deptUpdate(this.editForm)
+              .then(res => {
+                this.editFormVisible = false
+                this.loading = false
+                if (res.success) {
+                  this.getdata(this.formInline)
+                  this.$message({
+                    type: 'success',
+                    message: '角色编辑成功！'
+                  })
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: res.msg
+                  })
+                }
+              })
+              .catch(err => {
+                this.editFormVisible = false
+                this.loading = false
+                this.$message.error('角色编辑失败，请稍后再试！')
+              })
+          } else {
+            return false
+          }
+        })
+      }
+    },
+    // 删除角色
+    deletePosition(index, row) {
+      this.$confirm('确定要删除吗?', '信息', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+          deptDelete(row.code)
+            .then(res => {
+              if (res.data.success) {
+                this.$message({
+                  type: 'success',
+                  message: '角色已删除!'
+                })
+                this.getdata(this.formInline)
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: res.msg
+                })
+              }
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error('角色删除失败，请稍后再试！')
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    // 关闭编辑、增加弹出框
+    closeDialog(formRule) {
+      this.editFormVisible = false
+    }
+  }
+}
+</script>
+
+<style scoped>
+.comWidth {
+  width:240px;
+  font-size: 15px;
+}
+</style>
+
+ 
+ 
