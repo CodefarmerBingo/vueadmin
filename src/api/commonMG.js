@@ -3,8 +3,8 @@ import { req } from './axiosFun';
 
 // 登录接口 
 export const login = (params) => { return req("post", "platform-web/login", params) };
-// 获取用户菜单
-export const menu = (params) => { return req("post", "platform-web/v1.0/query/getConfig", params) };
+// 获取左侧menu菜单
+export const menu = (params) => { return req("post", "platform-web/v1.0/query/getConfig?code=" + params) };
 // 退出接口
 export const loginout = () => { return axios.delete("/api/login?&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
 

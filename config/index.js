@@ -21,7 +21,7 @@ module.exports = {
         // },
         proxyTable: {
             '/platform-web': {
-              target: 'http://172.30.23.124:9081',
+              target: 'http://172.30.23.133:9081',
               changeOrigin: true,
               pathRewrite: {
                 '^/platform-web': '/platform-web'

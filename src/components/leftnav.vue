@@ -35,6 +35,8 @@ export default {
   created() {
     // 获取图形验证码
     let _this = this;
+    let userData = JSON.parse(localStorage.getItem('userdata'));
+    let params = userData.code
     let res = {
       success: true,
       data: [
@@ -175,8 +177,9 @@ export default {
       msg: 'success'
     }
     // this.allmenu = res.data
-    menu().then(res =>{
+    menu(params).then(res =>{
       let menu = res.result
+      
       let firstMenu = []
       let secendMenu = []
       menu.forEach(el =>{
