@@ -27,4 +27,19 @@ body {
     widows: 100%;
     height: 100%;
 }
+body .el-table th.gutter{
+  display: table-cell!important;
+}
+.el-dialog__body {
+  padding: 0px 20px;
+}
+.el-form-item {
+  margin-bottom: 12px;
+}
+.el-form-item__error {
+  padding-top: 0px;
+}
+body .el-table .el-table__header-wrapper{
+  border-bottom:1px #EBEEF5 solid;
+}
 </style>

@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" :data="listData.slice((pageparm.currentPage -1) * pageparm.pageSize, pageparm.currentPage * pageparm.pageSize)" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+    <el-table size="small" height="490" :data="listData.slice((pagination.currentPage -1) * pagination.pageSize, pagination.currentPage * pagination.pageSize)" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
       <el-table-column align="center" prop="code" label="岗位职务代码" width="225">
       </el-table-column>
       <el-table-column align="center" prop="name" label="岗位职务名称" width="225">
@@ -32,7 +32,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页组件 -->
-    <Pagination v-bind:child-msg="pageparm" @callFather="callFather"></Pagination>
+    <el-pagination v-if="paginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
     <!-- 编辑界面 -->
     <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()">
       <el-form label-width="130px" :model="editForm" :rules="rules" ref="editForm">
@@ -75,20 +75,18 @@
 </template>
 
 <script>
-import {deptList,deptSave,deptUpdate,deptDelete} from '@/api/commonMG.js'
-import Pagination from '@/components/Pagination'
+import {postList,postSave,postUpdate,postDelete} from '@/api/commonMG.js'
 export default {
   data() {
     return {
       loading: false, //是显示加载
       editFormVisible: false, //控制编辑页面显示与隐藏
       detailsFormVisible:false, //控制详情页面显示与隐藏
+      paginationShow:true, //控制分页页面显示与否
       codeDis: false,
       title: '添加',
       detailsTitle:'详情',
-      tableName:'Position',
       editForm: {
-        tableName:'Position',
         name: '',
         code: '',
         note1:'',
@@ -107,22 +105,15 @@ export default {
       },
       listData: [], //用户数据
       // 分页参数
-      pageparm: {
+      pagination: {
         currentPage: 1,
         pageSize: 10,
         total: 10
       }
     }
   },
-  // 注册组件
-  components: {
-    Pagination
-  },
-  /**
-   * 创建完毕
-   */
   created() {
-    this.getdata(this.formInline)
+    this.getdata()
   },
 
   /**
@@ -132,8 +123,8 @@ export default {
     // 获取部门数据列表
     getdata(parameter) {
       this.loading = true
-      let params = {tableName:this.tableName,code:this.formInline.code,name:this.formInline.name}
-      deptList(params).then(res =>{
+      let params = {code:this.formInline.code,name:this.formInline.name}
+      postList(params).then(res =>{
         this.loading = false
         if(res.success == false){
           this.$message({
@@ -142,23 +133,22 @@ export default {
           })
         }else{
           this.listData = res.result;
-          this.pageparm.currentPage = this.formInline.page
-          this.pageparm.pageSize = this.formInline.limit
-          this.pageparm.total = res.total
+          this.pagination.currentPage = this.formInline.page
+          this.pagination.pageSize = this.formInline.limit
+          this.pagination.total = res.total
         }
       }).catch(error =>{
         this.loading = false
       })
     },
-    // 分页插件事件
-    callFather(parm) {
-      this.formInline.page = parm.currentPage
-      this.formInline.limit = parm.pageSize
-      this.getdata(this.formInline)
-    },
     // 搜索事件
     search() {
-      this.getdata(this.formInline)
+      this.paginationShow = false
+      this.handleCurrentChange(1)
+      this.$nextTick(function () {
+        this.paginationShow = true;
+      })
+      this.getdata()
     },
     //显示编辑界面
     handleEdit: function(index, row) {
@@ -192,12 +182,12 @@ export default {
       if(this.title == '添加'){
         this.$refs[editData].validate(valid => {
           if (valid) {
-            deptSave(this.editForm)
+            postSave(this.editForm)
               .then(res => {
                 this.editFormVisible = false
                 this.loading = false
                 if (res.success) {
-                  this.getdata(this.formInline)
+                  this.getdata()
                   this.$message({
                     type: 'success',
                     message: '岗位保存成功！'
@@ -221,12 +211,12 @@ export default {
       }else{
         this.$refs[editData].validate(valid => {
           if (valid) {
-            deptUpdate(this.editForm)
+            postUpdate(this.editForm)
               .then(res => {
                 this.editFormVisible = false
                 this.loading = false
                 if (res.success) {
-                  this.getdata(this.formInline)
+                  this.getdata()
                   this.$message({
                     type: 'success',
                     message: '岗位编辑成功！'
@@ -256,14 +246,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          deptDelete(row.code)
+          postDelete(row.code)
             .then(res => {
               if (res.data.success) {
                 this.$message({
                   type: 'success',
                   message: '岗位已删除!'
                 })
-                this.getdata(this.formInline)
+                this.getdata()
               } else {
                 this.$message({
                   type: 'info',
@@ -286,6 +276,13 @@ export default {
     // 关闭编辑、增加弹出框
     closeDialog(formRule) {
       this.editFormVisible = false
+    },
+    // 分页组件的当前页和分页变化
+    handleSizeChange(val) {
+      this.pagination.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.pagination.currentPage = val
     }
   }
 }
@@ -294,6 +291,9 @@ export default {
 <style scoped>
 .comWidth {
   width:240px
+}
+.page-box {
+  margin: 10px auto;
 }
 </style>
 

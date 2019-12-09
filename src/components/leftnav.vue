@@ -1,6 +1,3 @@
-/**
-* 左边菜单
-*/ 
 <template>
   <el-menu default-active="2" :collapse="collapsed" collapse-transition router :default-active="$route.path" unique-opened class="el-menu-vertical-demo" background-color="#334157" text-color="#fff" active-text-color="#ffd04b">
     <div class="logobox">
@@ -179,14 +176,13 @@ export default {
     // this.allmenu = res.data
     menu(params).then(res =>{
       let menu = res.result
-      
       let firstMenu = []
       let secendMenu = []
       menu.forEach(el =>{
         if(el.node != '0000'){
           if(el.father == '0000'){
             firstMenu.push(el)
-            el['menus'] = [];
+            el['menus'] = []
           }else{
             secendMenu.push(el)
           }
@@ -195,7 +191,7 @@ export default {
       for(let i=0;i<firstMenu.length;i++){
         for(let j=0;j<secendMenu.length;j++){
           if(secendMenu[j].father == firstMenu[i].node){
-            firstMenu[i].menus.push(secendMenu[j]);
+            firstMenu[i].menus.push(secendMenu[j])
           }
         }
       }
@@ -232,7 +228,6 @@ export default {
   color: #9d9d9d;
   font-size: 20px;
   text-align: center;
-  /* padding: 20px 0px; */
 }
 .logoimg {
   height: 40px;
