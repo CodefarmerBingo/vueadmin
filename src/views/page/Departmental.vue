@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" :data="listData.slice((pagination.currentPage -1) * pagination.pageSize, pagination.currentPage * pagination.pageSize)" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中" height="490">
+    <el-table size="small" :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中" height="490">
       <el-table-column align="center" prop="code" label="部门代码" width="225">
       </el-table-column>
       <el-table-column align="center" prop="name" label="部门名称" width="225">
@@ -97,8 +97,6 @@ export default {
         code: [{ required: true, message: '请输入部门代码', trigger: 'blur' }]
       },
       formInline: {
-        page: 1,
-        limit: 10,
         code: '',
         name: ''
       },
@@ -107,8 +105,9 @@ export default {
       pagination: {
         currentPage: 1,
         pageSize: 10,
-        total: 10
-      }
+        total: 0
+      },
+      params:{}
     }
   },
   created() {
@@ -122,18 +121,23 @@ export default {
     // 获取部门数据列表
     getdata(parameter) {
       this.loading = true
-      let params = {code:this.formInline.code,name:this.formInline.name}
-      deptList(params).then(res =>{
+      this.params = {
+        code:this.formInline.code,
+        name:this.formInline.name,
+        currentPage:this.pagination.currentPage,
+        pageSize:this.pagination.pageSize
+      }
+      deptList(this.params).then(res => {
         this.loading = false
         if(res.success == false){
           this.$message({
                type: 'info',
                message: res.errors
           })
-        }else{
+        }
+        else
+        {
           this.listData = res.result;
-          this.pagination.currentPage = this.formInline.page
-          this.pagination.pageSize = this.formInline.limit
           this.pagination.total = res.total
         }
       }).catch(error =>{
@@ -282,9 +286,11 @@ export default {
     // 分页组件的当前页和分页变化
     handleSizeChange(val) {
       this.pagination.pageSize = val
+      this.getdata()
     },
     handleCurrentChange(val) {
       this.pagination.currentPage = val
+      this.getdata()
     }
   }
 }

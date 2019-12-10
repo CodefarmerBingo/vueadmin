@@ -43,7 +43,7 @@
           </el-form-item>
         </el-form>
         <!--列表-->
-        <el-table size="small" height="490" :data="personnelListData.slice((pagination.currentPage -1) * pagination.pageSize, pagination.currentPage * pagination.pageSize)" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+        <el-table size="small" height="490" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="region" label="地区代码/名称" width="150">
           </el-table-column>
           <el-table-column align="center" prop="dept" label="部门代码/名称" width="200">
@@ -284,8 +284,6 @@ export default {
         }}],
       },
       personnelFormInline: {
-        page: 1,
-        limit: 10,
         region: '',
         dept: '',
         line: '',
@@ -304,7 +302,8 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      params:{}
     }
   },
   created() {
@@ -318,8 +317,22 @@ export default {
     // 获取公司列表
     getdata() {
       this.loading = true
-      let params = {region:this.personnelFormInline.region,dept:this.personnelFormInline.dept,line:this.personnelFormInline.line,position:this.personnelFormInline.position,name:this.personnelFormInline.name,engName:this.personnelFormInline.engName,code:this.personnelFormInline.code,account:this.personnelFormInline.account,email:this.personnelFormInline.email,idCardNumber:this.personnelFormInline.idCardNumber,note1:this.personnelFormInline.note1}
-      personnelList(params).then(res =>{
+      this.params = {
+        region:this.personnelFormInline.region,
+        dept:this.personnelFormInline.dept,
+        line:this.personnelFormInline.line,
+        position:this.personnelFormInline.position,
+        name:this.personnelFormInline.name,
+        engName:this.personnelFormInline.engName,
+        code:this.personnelFormInline.code,
+        account:this.personnelFormInline.account,
+        email:this.personnelFormInline.email,
+        idCardNumber:this.personnelFormInline.idCardNumber,
+        note1:this.personnelFormInline.note1,
+        currentPage:this.pagination.currentPage,
+        pageSize:this.pagination.pageSize
+      }
+      personnelList(this.params).then(res =>{
         this.loading = false
         if(res.success == false){
           this.$message({
@@ -328,8 +341,6 @@ export default {
           })
         }else{
           this.personnelListData = res.result;
-          this.pagination.currentPage = this.personnelFormInline.page
-          this.pagination.pageSize = this.personnelFormInline.limit
           this.pagination.total = res.total
         }
       }).catch(error =>{
@@ -509,9 +520,11 @@ export default {
     // 分页组件的当前页和分页变化
     handleSizeChange(val) {
       this.pagination.pageSize = val
+      this.getdata()
     },
     handleCurrentChange(val) {
       this.pagination.currentPage = val
+      this.getdata()
     }
   }
 }

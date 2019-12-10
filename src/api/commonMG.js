@@ -57,6 +57,31 @@ export const personnelView = (params) => { return req("post", "platform-web/work
 export const personnelUpdate = (params) => { return req("post", "platform-web/worker/updateSelective" , params) };
 // 员工设置-删除数据
 export const personnelDelete = (params) => { return  axios.delete("platform-web/worker/delete?code=" + params)};
+
+/**
+ * 客户信息
+ **/
+// 客户信息-获取数据列表
+export const customerList = (params) => { return req("post", "platform-web/customer/page", params) };
+// 客户信息-查询数据
+export const customerView = (params) => { return req("post", "platform-web/worker/getByCode?code=" +params) };
+
+/**
+ * 报表图形
+ **/
+// 报表图形-获取数据列表
+export const telRecordList = (params) => { return req("post", "platform-web/report/telRecordStatistics", params) };
+// 报表图形-查询数据
+// export const reportView = (params) => { return req("post", "platform-web/worker/getByCode?code=" +params) };
+
+/**
+ * 来电记录
+ **/
+// 来电记录-获取数据列表
+export const reportList = (params) => { return req("post", "platform-web/report/page", params) };
+// 来电记录-查询数据
+// export const reportView = (params) => { return req("post", "platform-web/worker/getByCode?code=" +params) };
+
 /**
  * 菜单管理
  **/

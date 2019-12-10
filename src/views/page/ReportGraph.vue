@@ -1,52 +1,312 @@
-/**
-* 模版
-**/ 
-
 <template>
-    <div>
-        报表图行
-    </div>
+  <div>
+    <!-- 搜索筛选 -->
+    <el-form :inline="true" :model="reportFormInline" class="user-search">
+      <el-form-item>
+        <el-select v-model="areaValue" placeholder="请选择">
+          <el-option size="small" v-for="item in areaOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="timeValue" placeholder="请选择">
+          <el-option size="small" v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="reportFormInline.ttime" placeholder="输入时间"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="reportFormInline.provinceCode" placeholder="输入地区代码"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+      </el-form-item>
+    </el-form>
+    <!--列表-->
+    <el-table size="small" height="490" :data="reportListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column align="center" prop="ttime" label="时间" width="120">
+      </el-table-column>
+      <el-table-column align="center" prop="provinceCode" label="地区代码" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="provinceName" label="地区名称" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="callInNumber" label="呼入数量" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="connectionNumber" label="接通数量" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="connectionRate" label="接通率" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="callTime" label="呼入时长" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="queueTime" label="坐席时长" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="avgCallInTIme" label="平均呼入时间" width="100">
+      </el-table-column>
+      <el-table-column align="center" prop="answerNo" label="坐席未接数量" width="100">
+      </el-table-column>
+      <el-table-column align="center" prop="answerNoRate" label="坐席未接率" width="90">
+      </el-table-column>
+      <el-table-column align="center" prop="answer" label="坐席应答数量" width="100">
+      </el-table-column>
+      <el-table-column align="center" prop="answerRate" label="坐席应答率" width="90">
+      </el-table-column>
+      <el-table-column align="center" prop="answer5" label="05秒内坐席应答数量" width="140">
+      </el-table-column>
+      <el-table-column align="center" prop="answer5Rate" label="05秒内坐席应答率" width="140">
+      </el-table-column>
+      <el-table-column align="center" prop="answer20" label="20秒内坐席应答数量" width="140">
+      </el-table-column>
+      <el-table-column align="center" prop="answer20Rate" label="20秒内坐席应答率" width="140">
+      </el-table-column>
+      <el-table-column align="center" prop="avgQueueTime" label="坐席平均时间" width="100">
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页组件 -->
+    <el-pagination v-if="reportPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[200, 500, 1000, 2000]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
+    <!-- 报表图形详情界面 -->
+    <el-dialog title="详情" :visible.sync="reportDetailsFormVisible" width="30%" @click="closeDialog()">
+      <el-form label-width="120px" :model="reportDetailsForm" ref="reportDetailsForm" >
+        <el-form-item label="时间" prop="ttime">
+          <el-input size="small" v-text="reportDetailsForm.ttime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="地区代码" prop="provinceCode">
+          <el-input size="small" v-text="reportDetailsForm.provinceCode" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="地区名称" prop="provinceName">
+          <el-input size="small" v-text="reportDetailsForm.provinceName" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="呼入数量" prop="callInNumber">
+          <el-input size="small" v-text="reportDetailsForm.callInNumber" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="接通数量" prop="connectionNumber">
+          <el-input size="small" v-text="reportDetailsForm.connectionNumber" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="接通率" prop="connectionRate">
+          <el-input size="small" v-text="reportDetailsForm.connectionRate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="呼入时长" prop="callTime">
+          <el-input size="small" v-text="reportDetailsForm.callTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席时长" prop="queueTime">
+          <el-input size="small" v-text="reportDetailsForm.queueTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="平均呼入时间" prop="avgCallInTIme">
+          <el-input size="small" v-text="reportDetailsForm.avgCallInTIme" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席未接数量" prop="answerNo">
+          <el-input size="small" v-text="reportDetailsForm.answerNo" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席未接率" prop="answerNoRate">
+          <el-input size="small" v-text="reportDetailsForm.answerNoRate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席应答数量" prop="answer">
+          <el-input size="small" v-text="reportDetailsForm.answer" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席应答率" prop="answerRate">
+          <el-input size="small" v-text="reportDetailsForm.answerRate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="05秒内坐席应答数量" prop="answer5">
+          <el-input size="small" v-text="reportDetailsForm.answer5" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="05秒内坐席应答率" prop="answer5Rate">
+          <el-input size="small" v-text="reportDetailsForm.answer5Rate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="20秒内坐席应答数量" prop="answer20">
+          <el-input size="small" v-text="reportDetailsForm.answer20" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="20秒内坐席应答率" prop="answer20Rate">
+          <el-input size="small" v-text="reportDetailsForm.answer20Rate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席平均时间" prop="avgQueueTime">
+          <el-input size="small" v-text="reportDetailsForm.avgQueueTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-// 导出模块
+import { telRecordList, personnelView } from '@/api/commonMG'
 export default {
-  // 模块名字
-  name: "ReportGraph",
-  // 模块数据
   data() {
-    //数据  
-    return {};
+    return {
+      loading: false, //是显示加载
+      reportPaginationShow:true, //控制分页页面显示与否
+      reportDetailsFormVisible: false, //详情页面显示与否
+      reportFormInline: {
+        ttime: '',
+        provinceCode: '',
+      },
+      reportDetailsForm: {
+        ttime: '',
+        provinceCode: '',
+        provinceName: '',
+        callInNumber: '',
+        connectionNumber: '',
+        connectionRate: '',
+        callTime: '',
+        queueTime: '',
+        avgCallInTIme: '',
+        answerNo: '',
+        answerNoRate: '',
+        answer: '',
+        answerRate: '',
+        answer5: '',
+        answer5Rate: '',
+        answer20: '',
+        answer20Rate: '',
+        avgQueueTime: '',
+      },
+      reportListData: [], //用户数据
+      // 分页参数
+      pagination: {
+        currentPage: 1,
+        pageSize: 200,
+        total: 0
+      },
+      areaOptions: [{
+        value: 0,
+        label: '直辖市/省/自治区'
+      }, {
+        value: 1,
+        label: '地级市/盟/州/地区'
+      }],
+      timeOptions: [{
+        value: 4,
+        label: '年'
+      }, {
+        value: 7,
+        label: '月'
+      }, {
+        value: 10,
+        label: '日'
+      }, {
+        value: 13,
+        label: '小时'
+      }],
+      areaValue: 1,
+      timeValue: 10,
+      code:'',
+      params:{}
+    }
   },
-  // 监听指定值，只有指定值变化，才会触发
-  watch: {},
-  // 里面的函数只有调用才会执行（实时计算）里面是定义的方法
+  created() {
+    let userData = JSON.parse(localStorage.getItem('userdata'));
+    this.code = userData.code.substring(0,2) + '0000'
+    this.getdata()
+  },
+
+  /**
+   * 里面的方法只有被调用才会执行
+   */
   methods: {
-    addFun() {},
-    submitFun() {}
-  },
-  // 创建前状态(里面是操作)
-  beforeCreate() {},
-  // 创建完毕状态(里面是操作)
-  created() {},
-  // 挂载前状态(里面是操作)
-  beforeMount() {},
-  // 挂载结束状态(里面是操作)
-  mounted() {},
-  // 更新前状态(里面是操作)
-  beforeUpdate() {},
-  // 更新完成状态(里面是操作)
-  updated() {},
-  // 销毁前状态(里面是操作)
-  beforeDestroy() {},
-  // 销毁完成状态(里面是操作)
-  destroyed() {}
-};
+    // 获取公司列表
+    getdata() {
+      this.loading = true
+      this.params = {
+        ttime:this.reportFormInline.ttime,
+        provinceCode:this.reportFormInline.provinceCode,
+        code:this.code,
+        codeNumber:this.areaValue,
+        timeNumber:this.timeValue,
+        currentPage:this.pagination.currentPage,
+        pageSize:this.pagination.pageSize
+      }
+      telRecordList(this.params).then(res =>{
+        console.log(res)
+        this.loading = false
+        if(res.success == false){
+          this.$message({
+               type: 'info',
+               message: res.errors
+          })
+        }else{
+          this.reportListData = res.result;
+          this.pagination.total = res.total
+        }
+      }).catch(error =>{
+        this.loading = false
+        this.$message({
+            type: 'info',
+            message: error
+        })
+      })
+    },
+    // 搜索事件
+    search() {
+      this.reportPaginationShow = false
+      this.handleCurrentChange(1)
+      this.$nextTick(function () {
+        this.reportPaginationShow = true;
+      })
+      this.getdata()
+    },
+    // 显示详情页
+    handleView:function(index,row){
+      this.reportDetailsFormVisible = true
+      this.reportDetailsForm.customerId = row.customerId
+      this.reportDetailsForm.customerName = row.customerName
+      this.reportDetailsForm.line = row.line
+      this.reportDetailsForm.position = row.position
+      this.reportDetailsForm.name = row.name
+      this.reportDetailsForm.engName = row.engName
+      this.reportDetailsForm.code = row.code
+      this.reportDetailsForm.account = row.account
+      this.reportDetailsForm.email = row.email
+      this.reportDetailsForm.idCardNumber = row.idCardNumber
+      this.reportDetailsForm.note1 = row.note1
+    },
+    // 关闭编辑、增加弹出框
+    closeDialog() {
+      this.reportDetailsFormVisible = false
+      this.reportDetailsFormVisible = false
+    },
+    // 分页组件的当前页和分页变化
+    handleSizeChange(val) {
+      this.pagination.pageSize = val
+      this.getdata()
+    },
+    handleCurrentChange(val) {
+      this.pagination.currentPage = val
+      this.getdata()
+    }
+  }
+}
 </script>
-// scoped 样式只在本组件使用
+
 <style scoped>
-/**
- * 导入css样式组件
- * @import "../assets/css/components/index.css";
- */
+.el-form--inline .el-form-item {
+  margin-right: 9px;
+}
+.comWidth {
+  width:240px
+}
+.page-box {
+  margin: 10px auto;
+}
+.el-dialog__body {
+  padding: 0px 20px;
+}
+.el-form-item {
+  margin-bottom: 12px;
+}
+.el-form-item__error {
+  padding-top: 0px;
+}
+/* .selectClass {
+  width: 100px;
+  height: 32px
+} */
+/* #areaSelect, #timeSelect{
+  width: 100px;
+  height: 32px
+} */
 </style>
+
+ 
+ 

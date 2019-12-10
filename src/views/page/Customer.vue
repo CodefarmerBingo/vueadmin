@@ -1,73 +1,99 @@
 <template>
   <div>
     <!-- 搜索筛选 -->
-    <el-form :inline="true" :model="formInline" class="user-search">
-      <el-form-item label="">
-        <el-input size="small" v-model="formInline.code" placeholder="输入角色"></el-input>
+    <el-form :inline="true" :model="customerFormInline" class="user-search">
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.customerId" placeholder="输入客户编号"></el-input>
       </el-form-item>
-      <el-form-item label="">
-        <el-input size="small" v-model="formInline.name" placeholder="输入角色名称"></el-input>
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.customerName" placeholder="输入客户名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.address" placeholder="输入地址"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.custTelephone" placeholder="输入电话号码"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.region" placeholder="输入地区代码"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.aliasName" placeholder="输入客户别名"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input size="small" v-model="customerFormInline.custCode" placeholder="输入客户编码"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-        <el-button size="small" type="primary" icon="el-icon-plus" @click="handleEdit()">添加</el-button>
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" :data="listData.slice((pageparm.currentPage -1) * pageparm.pageSize, pageparm.currentPage * pageparm.pageSize)" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
-      <el-table-column align="center" prop="code" label="角色" width="225">
+    <el-table size="small" height="490" :data="customerListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column align="center" prop="customerId" label="客户编号" width="130">
       </el-table-column>
-      <el-table-column align="center" prop="name" label="角色名称" width="225">
+      <el-table-column align="center" prop="customerName" label="客户名称" width="230">
       </el-table-column>
-      <el-table-column align="center" prop="note1" label="角色职务代码" width="225">
+      <el-table-column align="center" prop="address" label="地址" width="250">
       </el-table-column>
-      <el-table-column align="center" prop="note2" label="备注" width="225">
+      <el-table-column align="center" prop="custTelephone" label="电话号码" width="100">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="355">
+      <el-table-column align="center" prop="region" label="地区代码" width="70">
+      </el-table-column>
+      <el-table-column align="center" prop="provinceAndCity" label="地区名称" width="160">
+      </el-table-column>
+      <el-table-column align="center" prop="tradeName" label="行业类别名称" width="95">
+      </el-table-column>
+      <el-table-column align="center" prop="industryName" label="行业名称" width="100">
+      </el-table-column>
+      <el-table-column align="center" prop="aliasName" label="客户别名" width="100">
+      </el-table-column>
+      <el-table-column align="center" prop="custCode" label="客户编码" width="200">
+      </el-table-column>
+      <el-table-column align="center" prop="updateTime" label="更新时间" width="200">
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
-          <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-delete" @click="deletePosition(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页组件 -->
-    <Pagination v-bind:child-msg="pageparm" @callFather="callFather"></Pagination>
-    <!-- 编辑界面 -->
-    <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()">
-      <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm">
-        <el-form-item label="角色" prop="code">
-          <el-input size="small" v-model="editForm.code" auto-complete="off" placeholder="请输入角色" class="comWidth" :disabled="codeDis"></el-input>
+    <el-pagination v-if="personnelPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[200, 500, 1000, 2000]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
+    <!-- 客户信息详情界面 -->
+    <el-dialog title="详情" :visible.sync="customerDetailsFormVisible" width="30%" @click="closeDialog()">
+      <el-form label-width="120px" :model="customerDetailsForm" ref="customerDetailsForm" >
+        <el-form-item label="客户编号" prop="customerId">
+          <el-input size="small" v-text="customerDetailsForm.customerId" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-        <el-form-item label="角色名称" prop="name">
-          <el-input size="small" v-model="editForm.name" auto-complete="off" placeholder="请输入角色名称"  class="comWidth"></el-input>
+        <el-form-item label="客户名称" prop="customerName">
+          <el-input size="small" v-text="customerDetailsForm.customerName" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-        <el-form-item label="角色职务代码" prop="note1">
-          <el-input size="small" v-model="editForm.note1" auto-complete="off" placeholder="请输入角色职务代码" class="comWidth"></el-input>
+        <el-form-item label="地址" prop="address">
+          <el-input size="small" v-text="customerDetailsForm.address" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="note2">
-          <el-input size="small" v-model="editForm.note2" auto-complete="off" placeholder="请输入备注"  class="comWidth"></el-input>
+        <el-form-item label="电话号码" prop="custTelephone">
+          <el-input size="small" v-text="customerDetailsForm.custTelephone" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="closeDialog()">取消</el-button>
-        <el-button size="small" type="primary" :loading="loading" class="title" @click="submitForm('editForm')">保存</el-button>
-      </div>
-    </el-dialog>
-    <!-- 详情界面 -->
-    <el-dialog :title="detailsTitle" :visible.sync="detailsFormVisible" width="30%" @click="closeDialog()">
-      <el-form label-width="120px" :model="editForm" ref="editForm">
-        <el-form-item label="角色" prop="code">
-          <el-input size="small" v-text="editForm.code" :disabled="true"  class="comWidth"></el-input>
+        <el-form-item label="地区代码" prop="region">
+          <el-input size="small" v-text="customerDetailsForm.region" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-        <el-form-item label="角色名称" prop="name">
-          <el-input size="small" v-text="editForm.name" :disabled="true"  class="comWidth"></el-input>
+        <el-form-item label="地区名称" prop="provinceAndCity">
+          <el-input size="small" v-text="customerDetailsForm.provinceAndCity" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-        <el-form-item label="主管角色代码" prop="note1">
-          <el-input size="small" v-text="editForm.note1" :disabled="true"  class="comWidth"></el-input>
+        <el-form-item label="行业类别名称" prop="tradeName">
+          <el-input size="small" v-text="customerDetailsForm.tradeName" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="note2">
-          <el-input size="small" v-text="editForm.note2" :disabled="true"  class="comWidth"></el-input>
+        <el-form-item label="行业名称" prop="industryName">
+          <el-input size="small" v-text="customerDetailsForm.industryName" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="客户别名" prop="aliasName">
+          <el-input size="small" v-text="customerDetailsForm.aliasName" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="客户编码" prop="custCode">
+          <el-input size="small" v-text="customerDetailsForm.custCode" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="更新时间" prop="updateTime">
+          <el-input size="small" v-text="customerDetailsForm.updateTime" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -75,65 +101,77 @@
 </template>
 
 <script>
-import {deptList,deptSave,deptUpdate,deptDelete} from '@/api/commonMG.js'
-import Pagination from '@/components/Pagination'
+import { customerList } from '@/api/commonMG'
 export default {
   data() {
     return {
       loading: false, //是显示加载
-      editFormVisible: false, //控制编辑页面显示与隐藏
-      detailsFormVisible:false, //控制详情页面显示与隐藏
-      codeDis: false,
-      title: '添加',
-      detailsTitle:'详情',
-      tableName:'Role',
-      editForm: {
-        tableName:'Role',
-        name: '',
-        code: '',
-        note1:'',
-        note2:''
+      personnelPaginationShow:true, //控制分页页面显示与否
+      customerDetailsFormVisible: false, //详情页面显示与否
+      customerFormInline: {
+        customerId: '',
+        customerName: '',
+        address: '',
+        custTelephone: '',
+        region: '',
+        provinceAndCity: '',
+        tradeName: '',
+        industryName: '',
+        aliasName: '',
+        custCode: '',
+        updateTime: '',
       },
-      // rules表单验证
-      rules: {
-        name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入角色', trigger: 'blur' }]
+      customerDetailsForm: {
+        customerId: '',
+        customerName: '',
+        address: '',
+        custTelephone: '',
+        region: '',
+        provinceAndCity: '',
+        tradeName: '',
+        industryName: '',
+        aliasName: '',
+        custCode: '',
+        updateTime: '',
       },
-      formInline: {
-        page: 1,
-        limit: 10,
-        code: '',
-        name: ''
-      },
-      listData: [], //用户数据
+      customerListData: [], //用户数据
       // 分页参数
-      pageparm: {
+      pagination: {
         currentPage: 1,
-        pageSize: 10,
-        total: 10
-      }
+        pageSize: 200,
+        total: 0
+      },
+      params:{}
     }
   },
-  // 注册组件
-  components: {
-    Pagination
-  },
-  /**
-   * 创建完毕
-   */
   created() {
-    this.getdata(this.formInline)
+    this.getdata()
   },
 
   /**
    * 里面的方法只有被调用才会执行
    */
   methods: {
-    // 获取部门数据列表
-    getdata(parameter) {
+    // 获取公司列表
+    getdata() {
       this.loading = true
-      let params = {tableName:this.tableName,code:this.formInline.code,name:this.formInline.name}
-      deptList(params).then(res =>{
+      this.params = {
+        customerId:this.customerFormInline.customerId,
+        customerName:this.customerFormInline.customerName,
+        address:this.customerFormInline.address,
+        custTelephone:this.customerFormInline.custTelephone,
+        region:this.customerFormInline.region,
+        provinceAndCity:this.customerFormInline.provinceAndCity,
+        tradeName:this.customerFormInline.tradeName,
+        industryName:this.customerFormInline.industryName,
+        aliasName:this.customerFormInline.aliasName,
+        custCode:this.customerFormInline.custCode,
+        updateTime:this.customerFormInline.updateTime,
+        currentPage:this.pagination.currentPage,
+        pageSize:this.pagination.pageSize,
+      }
+      customerList(this.params).then(res =>{
+        console.log(res)
         this.loading = false
         if(res.success == false){
           this.$message({
@@ -141,160 +179,77 @@ export default {
                message: res.errors
           })
         }else{
-          this.listData = res.result;
-          this.pageparm.currentPage = this.formInline.page
-          this.pageparm.pageSize = this.formInline.limit
-          this.pageparm.total = res.total
+          this.customerListData = res.result;
+          this.pagination.total = res.total
         }
       }).catch(error =>{
         this.loading = false
+        this.$message({
+            type: 'info',
+            message: error
+        })
       })
-    },
-    // 分页插件事件
-    callFather(parm) {
-      this.formInline.page = parm.currentPage
-      this.formInline.limit = parm.pageSize
-      this.getdata(this.formInline)
     },
     // 搜索事件
     search() {
-      this.getdata(this.formInline)
+      this.personnelPaginationShow = false
+      this.handleCurrentChange(1)
+      this.$nextTick(function () {
+        this.personnelPaginationShow = true;
+      })
+      this.getdata()
     },
-    //显示编辑界面
-    handleEdit: function(index, row) {
-      this.editFormVisible = true
-      if (row != undefined && row != 'undefined') {
-        this.title = '修改'
-        this.codeDis = true
-        this.editForm.name = row.name
-        this.editForm.code = row.code
-        this.editForm.note1 = row.note1
-        this.editForm.note2 = row.note2
-      } else {
-        this.title = '添加'
-        this.codeDis = false
-        this.editForm.name = ''
-        this.editForm.code = ''
-        this.editForm.note1 = ''
-        this.editForm.note2 = ''
-      }
-    },
-    //显示详情页面
+    // 显示详情页
     handleView:function(index,row){
-      this.detailsFormVisible = true
-      this.editForm.name = row.name
-      this.editForm.code = row.code
-      this.editForm.note1 = row.note1
-      this.editForm.note2 = row.note2
-    },
-    // 增加页面保存方法
-    submitForm(editData) {
-      if(this.title == '添加'){
-        this.$refs[editData].validate(valid => {
-          if (valid) {
-            deptSave(this.editForm)
-              .then(res => {
-                this.editFormVisible = false
-                this.loading = false
-                if (res.success) {
-                  this.getdata(this.formInline)
-                  this.$message({
-                    type: 'success',
-                    message: '角色保存成功！'
-                  })
-                } else {
-                  this.$message({
-                    type: 'info',
-                    message: res.msg
-                  })
-                }
-              })
-              .catch(err => {
-                this.editFormVisible = false
-                this.loading = false
-                this.$message.error('角色保存失败，请稍后再试！')
-              })
-          } else {
-            return false
-          }
-        })
-      }else{
-        this.$refs[editData].validate(valid => {
-          if (valid) {
-            deptUpdate(this.editForm)
-              .then(res => {
-                this.editFormVisible = false
-                this.loading = false
-                if (res.success) {
-                  this.getdata(this.formInline)
-                  this.$message({
-                    type: 'success',
-                    message: '角色编辑成功！'
-                  })
-                } else {
-                  this.$message({
-                    type: 'info',
-                    message: res.msg
-                  })
-                }
-              })
-              .catch(err => {
-                this.editFormVisible = false
-                this.loading = false
-                this.$message.error('角色编辑失败，请稍后再试！')
-              })
-          } else {
-            return false
-          }
-        })
-      }
-    },
-    // 删除角色
-    deletePosition(index, row) {
-      this.$confirm('确定要删除吗?', '信息', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-          deptDelete(row.code)
-            .then(res => {
-              if (res.data.success) {
-                this.$message({
-                  type: 'success',
-                  message: '角色已删除!'
-                })
-                this.getdata(this.formInline)
-              } else {
-                this.$message({
-                  type: 'info',
-                  message: res.msg
-                })
-              }
-            })
-            .catch(err => {
-              this.loading = false
-              this.$message.error('角色删除失败，请稍后再试！')
-            })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+      this.customerDetailsFormVisible = true
+      this.customerDetailsForm.customerId = row.customerId
+      this.customerDetailsForm.customerName = row.customerName
+      this.customerDetailsForm.address = row.address
+      this.customerDetailsForm.custTelephone = row.custTelephone
+      this.customerDetailsForm.region = row.region
+      this.customerDetailsForm.provinceAndCity = row.provinceAndCity
+      this.customerDetailsForm.tradeName = row.tradeName
+      this.customerDetailsForm.industryName = row.industryName
+      this.customerDetailsForm.aliasName = row.aliasName
+      this.customerDetailsForm.custCode = row.custCode
+      this.customerDetailsForm.updateTime = row.updateTime
     },
     // 关闭编辑、增加弹出框
-    closeDialog(formRule) {
-      this.editFormVisible = false
+    closeDialog() {
+      this.customerDetailsFormVisible = false
+      this.customerDetailsFormVisible = false
+    },
+    // 分页组件的当前页和分页变化
+    handleSizeChange(val) {
+      this.pagination.pageSize = val
+      this.getdata()
+    },
+    handleCurrentChange(val) {
+      this.pagination.currentPage = val
+      this.getdata()
     }
   }
 }
 </script>
 
 <style scoped>
+.el-form--inline .el-form-item {
+  margin-right: 9px;
+}
 .comWidth {
   width:240px;
-  font-size: 15px;
+}
+.page-box {
+  margin: 10px auto;
+}
+.el-dialog__body {
+  padding: 0px 20px;
+}
+.el-form-item {
+  margin-bottom: 12px;
+}
+.el-form-item__error {
+  padding-top: 0px;
 }
 </style>
 
