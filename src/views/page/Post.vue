@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" height="490" :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+    <el-table size="small" height="488" :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
       <el-table-column align="center" prop="code" label="岗位职务代码" width="225">
       </el-table-column>
       <el-table-column align="center" prop="name" label="岗位职务名称" width="225">

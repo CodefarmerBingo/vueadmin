@@ -43,10 +43,10 @@
           </el-form-item>
         </el-form>
         <!--列表-->
-        <el-table size="small" height="490" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+        <el-table size="small" height="490" ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="region" label="地区代码/名称" width="150">
           </el-table-column>
-          <el-table-column align="center" prop="dept" label="部门代码/名称" width="200">
+          <el-table-column align="center" prop="dept" label="部门代码/名称" width="250">
           </el-table-column>
           <el-table-column align="center" prop="line" label="显示次序" width="70">
           </el-table-column>
@@ -155,41 +155,43 @@
     </el-dialog>
     <!-- 人员设置详情界面 -->
     <el-dialog title="详情" :visible.sync="personnelDetailsFormVisible" width="30%" @click="closeDialog()">
-      <el-form label-width="120px" :model="personnelEditForm" ref="personnelEditForm" >
-        <el-form-item label="地区代码" prop="region">
-          <el-input size="small" v-text="personnelEditForm.region" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称" prop="dept">
-          <el-input size="small" v-text="personnelEditForm.dept" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="显示次序" prop="line">
-          <el-input size="small" v-text="personnelEditForm.line" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="岗位职务代码" prop="position">
-          <el-input size="small" v-text="personnelEditForm.position" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input size="small" v-text="personnelEditForm.name" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="英文姓名" prop="engName">
-          <el-input size="small" v-text="personnelEditForm.engName" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="工号" prop="code">
-          <el-input size="small" v-text="personnelEditForm.code" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="域账号" prop="account">
-          <el-input size="small" v-text="personnelEditForm.account" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="Email" prop="email">
-          <el-input size="small" v-text="personnelEditForm.email" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证号码" prop="idCardNumber">
-          <el-input size="small" v-text="personnelEditForm.idCardNumber" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="note1">
-          <el-input size="small" v-text="personnelEditForm.note1" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-      </el-form>
+      <div class="el-dialog-div">
+        <el-form label-width="120px" :model="personnelEditForm" ref="personnelEditForm" >
+          <el-form-item label="地区代码" prop="region">
+            <el-input size="small" v-text="personnelEditForm.region" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="部门名称" prop="dept">
+            <el-input size="small" v-text="personnelEditForm.dept" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="显示次序" prop="line">
+            <el-input size="small" v-text="personnelEditForm.line" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="岗位职务代码" prop="position">
+            <el-input size="small" v-text="personnelEditForm.position" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="姓名" prop="name">
+            <el-input size="small" v-text="personnelEditForm.name" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="英文姓名" prop="engName">
+            <el-input size="small" v-text="personnelEditForm.engName" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="工号" prop="code">
+            <el-input size="small" v-text="personnelEditForm.code" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="域账号" prop="account">
+            <el-input size="small" v-text="personnelEditForm.account" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="Email" prop="email">
+            <el-input size="small" v-text="personnelEditForm.email" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="身份证号码" prop="idCardNumber">
+            <el-input size="small" v-text="personnelEditForm.idCardNumber" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="note1">
+            <el-input size="small" v-text="personnelEditForm.note1" :disabled="true"  class="comWidth"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -340,8 +342,9 @@ export default {
                message: res.errors
           })
         }else{
-          this.personnelListData = res.result;
+          this.personnelListData = res.result
           this.pagination.total = res.total
+          this.$refs.configurationTable.$el.style.width = '98%'
         }
       }).catch(error =>{
         this.loading = false
@@ -548,6 +551,11 @@ export default {
 }
 .el-form-item__error {
   padding-top: 0px;
+}
+.el-dialog-div {
+  width: 100%;
+  height: 500px;
+  overflow: auto;
 }
 </style>
 

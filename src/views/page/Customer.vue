@@ -28,7 +28,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" height="490" :data="customerListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+    <el-table size="small" height="490" ref="configurationTable" :data="customerListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
       <el-table-column align="center" prop="customerId" label="客户编号" width="130">
       </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称" width="230">
@@ -181,6 +181,7 @@ export default {
         }else{
           this.customerListData = res.result;
           this.pagination.total = res.total
+          this.$refs.configurationTable.$el.style.width = '98%'
         }
       }).catch(error =>{
         this.loading = false

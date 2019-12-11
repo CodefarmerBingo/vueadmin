@@ -39,11 +39,4 @@ body .el-table th.gutter{
 .el-form-item__error {
   padding-top: 0px;
 }
-body .el-table .el-table__header-wrapper{
-  border-bottom:1px #EBEEF5 solid;
-}
-/* body .el-input--suffix {
-  width: 100px;
-  height: 32px
-} */
 </style>
