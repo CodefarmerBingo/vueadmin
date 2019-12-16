@@ -34,8 +34,8 @@
     <!-- 分页组件 -->
     <el-pagination v-if="paginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
     <!-- 编辑界面 -->
-    <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()">
-      <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm">
+    <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()" class="dialog">
+      <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm" class="dialogShortForm">
         <el-form-item label="角色" prop="code">
           <el-input size="small" v-model="editForm.code" auto-complete="off" placeholder="请输入角色" class="comWidth" :disabled="codeDis"></el-input>
         </el-form-item>
@@ -55,8 +55,8 @@
       </div>
     </el-dialog>
     <!-- 详情界面 -->
-    <el-dialog :title="detailsTitle" :visible.sync="detailsFormVisible" width="30%" @click="closeDialog()">
-      <el-form label-width="120px" :model="editForm" ref="editForm">
+    <el-dialog :title="detailsTitle" :visible.sync="detailsFormVisible" width="30%" @click="closeDialog()" class="dialog">
+      <el-form label-width="120px" :model="editForm" ref="editForm" class="dialogShortForm">
         <el-form-item label="角色" prop="code">
           <el-input size="small" v-text="editForm.code" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
@@ -135,7 +135,7 @@ export default {
         }else{
           if(res.code == '403'){
             this.$message({
-                 type: 'info',
+                 type: 'warning',
                  message: res.msg
             })
           }
@@ -197,7 +197,7 @@ export default {
                   })
                 } else {
                   this.$message({
-                    type: 'info',
+                    type: 'warning',
                     message: res.msg
                   })
                 }
@@ -226,7 +226,7 @@ export default {
                   })
                 } else {
                   this.$message({
-                    type: 'info',
+                    type: 'warning',
                     message: res.msg
                   })
                 }
@@ -259,7 +259,7 @@ export default {
                 this.getdata()
               } else {
                 this.$message({
-                  type: 'info',
+                  type: 'warning',
                   message: res.msg
                 })
               }
@@ -271,7 +271,7 @@ export default {
         })
         .catch(() => {
           this.$message({
-            type: 'info',
+            type: 'warning',
             message: '已取消删除'
           })
         })

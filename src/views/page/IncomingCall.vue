@@ -346,7 +346,7 @@ export default {
         }else{
           if(res.code == '403'){
             this.$message({
-                 type: 'info',
+                 type: 'warning',
                  message: res.msg
             })
           }
@@ -354,7 +354,7 @@ export default {
       }).catch(error =>{
         this.loading = false
         this.$message({
-            type: 'info',
+            type: 'warning',
             message: error
         })
       })

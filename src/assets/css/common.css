@@ -21,6 +21,10 @@
   height: 455px;
   overflow: auto;
 }
+.dialog /deep/ .dialogShortForm{
+  height: 230px;
+  overflow: auto;
+}
 .el-select /deep/ .el-input__inner {
   height: 32px
 }
