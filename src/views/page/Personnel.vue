@@ -469,15 +469,17 @@ export default {
       }
       personnelList(this.params).then(res =>{
         this.loading = false
-        if(res.success == false){
-          this.$message({
-               type: 'info',
-               message: res.errors
-          })
-        }else{
+        if(res.success){
           this.personnelListData = res.result
           this.pagination.total = res.total
           this.$refs.configurationTable.$el.style.width = '98%'
+        }else{
+          if(res.code == '403'){
+            this.$message({
+                 type: 'info',
+                 message: res.msg
+            })
+          }
         }
       }).catch(error =>{
         this.loading = false
@@ -684,15 +686,17 @@ export default {
       }
       historyList(this.historyParams).then(res =>{
         this.loading = false
-        if(res.success == false){
-          this.$message({
-               type: 'info',
-               message: res.errors
-          })
-        }else{
+        if(res.success){
           this.historyListData = res.result
           this.historyPagination.total = res.total
           this.$refs.historyConfigurationTable.$el.style.width = '98%'
+        }else{
+          if(res.code == '403'){
+            this.$message({
+                 type: 'info',
+                 message: res.msg
+            })
+          }
         }
       }).catch(error =>{
         this.loading = false

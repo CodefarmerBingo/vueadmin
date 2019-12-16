@@ -84,11 +84,11 @@ export default {
             if (res.success) {
               if (this.rememberpwd) {
                 //保存帐号到cookie，有效期7天
-                // setCookie('user', this.ruleForm.username, 7)
-                localStorage.setItem('username',this.ruleForm.username)
+                setCookie('user', this.ruleForm.username, 7)
+                // localStorage.setItem('username',this.ruleForm.username)
                 //保存密码到cookie，有效期7天
-                // setCookie('pwd', this.ruleForm.password, 7)
-                localStorage.setItem('password',this.ruleForm.password)
+                setCookie('pwd', this.ruleForm.password, 7)
+                // localStorage.setItem('password',this.ruleForm.password)
               } else {
                 delCookie('user')
                 delCookie('pwd')

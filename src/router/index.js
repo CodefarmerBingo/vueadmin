@@ -95,14 +95,6 @@ export default new Router({
                 requireAuth: true
             }
         }, 
-        // {
-        //     path: '/page/Operational',
-        //     name: '操作参数',
-        //     component: Operational,
-        //     meta: {
-        //         requireAuth: true
-        //     }
-        // }, 
         {
             path: '/page/ReportGraph',
             name: '报表图行',

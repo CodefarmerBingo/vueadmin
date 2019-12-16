@@ -129,14 +129,16 @@ export default {
       }
       roleList(this.params).then(res =>{
         this.loading = false
-        if(res.success == false){
-          this.$message({
-               type: 'info',
-               message: res.errors
-          })
-        }else{
+        if(res.success){
           this.listData = res.result;
           this.pagination.total = res.total
+        }else{
+          if(res.code == '403'){
+            this.$message({
+                 type: 'info',
+                 message: res.msg
+            })
+          }
         }
       }).catch(error =>{
         this.loading = false
