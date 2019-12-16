@@ -242,6 +242,10 @@ export default {
         })
       }
     },
+    // 重置表单校验
+    resetForm(formName) {
+        this.$refs[formName].resetFields();
+    },
     // 删除部门
     deleteDept(index, row) {
       this.$confirm('确定要删除吗?', '信息', {
@@ -297,12 +301,6 @@ export default {
 </script>
 
 <style scoped>
-.comWidth {
-  width:240px
-}
-.page-box {
-  margin: 10px auto;
-}
 </style>
 
  

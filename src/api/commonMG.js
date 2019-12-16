@@ -59,6 +59,20 @@ export const personnelUpdate = (params) => { return req("post", "platform-web/wo
 export const personnelDelete = (params) => { return  axios.delete("platform-web/worker/delete?code=" + params)};
 
 /**
+ * 岗位变动历史 
+ **/
+// 岗位变动历史-获取数据列表
+export const historyList = (params) => { return req("post", "platform-web/workerHistory/page", params) };
+// 岗位变动历史-保存数据
+export const historySave = (params) => { return req("post", "platform-web/workerHistory/insertSelective", params) };
+// 岗位变动历史-查询数据
+export const historyView = (params) => { return req("post", "platform-web/workerHistory/getByCode?code=" +params) };
+// 岗位变动历史-编辑数据
+export const historyUpdate = (params) => { return req("post", "platform-web/workerHistory/updateSelective" , params) };
+// 岗位变动历史-删除数据
+export const historyDelete = (params) => { return  axios.delete("platform-web/workerHistory/delete?code=" + params)};
+
+/**
  * 客户信息
  **/
 // 客户信息-获取数据列表

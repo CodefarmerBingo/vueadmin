@@ -292,13 +292,6 @@ export default {
 </script>
 
 <style scoped>
-.comWidth {
-  width:240px;
-  font-size: 15px;
-}
-.page-box {
-  margin: 10px auto;
-}
 </style>
 
  

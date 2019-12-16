@@ -25,14 +25,14 @@ import Role from '@/views/page/Role';
 import Personnel from '@/views/page/Personnel';
 // 权限设置界面
 import Permission from '@/views/page/Permission';
-// 操作参数界面
-// import Operational from '@/views/page/Operational';
 // 报表图行界面
 import ReportGraph from '@/views/page/ReportGraph';
 // 来电记录界面
 import IncomingCall from '@/views/page/IncomingCall';
 // 客户信息页面
 import Customer from '@/views/page/Customer';
+// 欢迎界面
+import Welcome from '@/views/page/Welcome';
 // 启用路由
 Vue.use(Router);
 
@@ -58,7 +58,6 @@ export default new Router({
         path: '/index',
         name: '首页',
         component: index,
-        // iconCls: 'el-icon-tickets',
         children: [
             {
             path: '/page/Departmental',
@@ -125,11 +124,10 @@ export default new Router({
             meta: {
                 requireAuth: true
             }
-        },
-        {
-            path: '/goods/Goods',
-            name: '商品管理',
-            component: Goods,
+        },{
+            path: '/page/Welcome',
+            name: '客户信息',
+            component: Welcome,
             meta: {
                 requireAuth: true
             }

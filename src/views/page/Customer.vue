@@ -58,10 +58,10 @@
       </el-table-column>
     </el-table>
     <!-- 分页组件 -->
-    <el-pagination v-if="personnelPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[200, 500, 1000, 2000]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
+    <el-pagination v-if="personnelPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[100,200, 500, 1000, 2000]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
     <!-- 客户信息详情界面 -->
-    <el-dialog title="详情" :visible.sync="customerDetailsFormVisible" width="30%" @click="closeDialog()">
-      <el-form label-width="120px" :model="customerDetailsForm" ref="customerDetailsForm" >
+    <el-dialog title="详情" :visible.sync="customerDetailsFormVisible" width="30%" @click="closeDialog()" class="dialog">
+      <el-form label-width="120px" :model="customerDetailsForm" ref="customerDetailsForm" class="dialogForm">
         <el-form-item label="客户编号" prop="customerId">
           <el-input size="small" v-text="customerDetailsForm.customerId" :disabled="true"  class="comWidth"></el-input>
         </el-form-item>
@@ -138,7 +138,7 @@ export default {
       // 分页参数
       pagination: {
         currentPage: 1,
-        pageSize: 200,
+        pageSize: 100,
         total: 0
       },
       params:{}
@@ -171,7 +171,6 @@ export default {
         pageSize:this.pagination.pageSize,
       }
       customerList(this.params).then(res =>{
-        console.log(res)
         this.loading = false
         if(res.success == false){
           this.$message({
@@ -234,24 +233,6 @@ export default {
 </script>
 
 <style scoped>
-.el-form--inline .el-form-item {
-  margin-right: 9px;
-}
-.comWidth {
-  width:240px;
-}
-.page-box {
-  margin: 10px auto;
-}
-.el-dialog__body {
-  padding: 0px 20px;
-}
-.el-form-item {
-  margin-bottom: 12px;
-}
-.el-form-item__error {
-  padding-top: 0px;
-}
 </style>
 
  

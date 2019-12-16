@@ -79,20 +79,16 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.logining = true
-          // 测试通道，不为空直接登录
-          // setTimeout(() => {
-          //   this.logining = false
-          //   this.$store.commit('login', 'true')
-          //   this.$router.push({ path: '/goods/Goods' })
-          // }, 1000)
           // 注释
           login(this.ruleForm).then(res => {
             if (res.success) {
               if (this.rememberpwd) {
                 //保存帐号到cookie，有效期7天
-                setCookie('user', this.ruleForm.username, 7)
+                // setCookie('user', this.ruleForm.username, 7)
+                localStorage.setItem('username',this.ruleForm.username)
                 //保存密码到cookie，有效期7天
-                setCookie('pwd', this.ruleForm.password, 7)
+                // setCookie('pwd', this.ruleForm.password, 7)
+                localStorage.setItem('password',this.ruleForm.password)
               } else {
                 delCookie('user')
                 delCookie('pwd')
@@ -100,12 +96,10 @@ export default {
               //如果请求成功就让他1秒跳转路由
               setTimeout(() => {
                 this.logining = false
-                // 缓存token
-                localStorage.setItem('logintoken', typeof res.result.code == 'string' ? JSON.parse(res.result.code) : res.result.code)
                 // 缓存用户个人信息
                 localStorage.setItem('userdata', JSON.stringify(res.result))
                 this.$store.commit('login', 'true')
-                this.$router.push({ path: '/page/Departmental' })
+                this.$router.push({ path: '/page/Welcome' })
               }, 1000)
             } else {
               this.$message.error(res.errors[0])

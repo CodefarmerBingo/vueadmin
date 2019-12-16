@@ -293,12 +293,6 @@ export default {
 </script>
 
 <style scoped>
-.comWidth {
-  width:240px
-}
-.page-box {
-  margin: 10px auto;
-}
 </style>
 
  

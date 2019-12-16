@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-tabs type="border-card">
-      <el-tab-pane label="员工设置">
-        <!-- 搜索筛选 -->
-        <el-form :inline="true" :model="personnelFormInline" class="user-search">
+    <el-tabs :tab-position="tabPosition" v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="员工设置" name="员工设置">
+        <!-- 员工设置搜索筛选 -->
+        <el-form :inline="true" :model="personnelFormInline">
           <el-form-item>
             <el-input size="small" v-model="personnelFormInline.region" placeholder="输入地区代码"></el-input>
           </el-form-item>
@@ -42,7 +42,7 @@
             <el-button size="small" type="primary" icon="el-icon-plus" @click="handleAdd()">添加</el-button>
           </el-form-item>
         </el-form>
-        <!--列表-->
+        <!-- 员工设置列表-->
         <el-table size="small" height="490" ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="region" label="地区代码/名称" width="150">
           </el-table-column>
@@ -74,46 +74,90 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- 分页组件 -->
+        <!-- 员工设置分页组件 -->
         <el-pagination v-if="personnelPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="岗位变动历史">
-        <!-- 搜索筛选 -->
-        <el-form :inline="true" :model="personnelFormInline" class="user-search">
+      <el-tab-pane label="岗位变动历史" name="岗位变动历史">
+        <!-- 岗位变动历史搜索筛选 -->
+        <el-form :inline="true" :model="historyFormInline">
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.deptName" placeholder="输入角色代码"></el-input>
+            <el-input size="small" v-model="historyFormInline.region" placeholder="输入地区代码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.deptNo" placeholder="输入角色名称"></el-input>
+            <el-input size="small" v-model="historyFormInline.dept" placeholder="输入部门代码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-            <el-button size="small" type="primary" icon="el-icon-plus" @click="handleEdit()">添加</el-button>
+            <el-input size="small" v-model="historyFormInline.line" placeholder="输入显示次序"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.position" placeholder="输入岗位职务"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.name" placeholder="输入姓名"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.engName" placeholder="输入英文姓名"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.code" placeholder="输入工号"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.account" placeholder="输入域账号"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.email" placeholder="输入Email"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.idCardNumber" placeholder="输入身份证号码"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input size="small" v-model="historyFormInline.note1" placeholder="输入备注"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button size="small" type="primary" icon="el-icon-search" @click="historySearch">搜索</el-button>
           </el-form-item>
         </el-form>
-        <!--列表-->
-        <el-table size="small" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
-          <el-table-column align="center" prop="deptName" label="角色代码" width="300">
+        <!-- 岗位变动历史列表 -->
+        <el-table size="small" height="490" ref="historyConfigurationTable" :data="historyListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+          <el-table-column align="center" prop="startTime" label="开始时间" width="90">
           </el-table-column>
-          <el-table-column align="center" prop="deptNo" label="角色名称" width="300">
+          <el-table-column align="center" prop="endTime" label="结束时间" width="90">
           </el-table-column>
-          <el-table-column align="center" prop="editTime" label="备注" width="300">
+          <el-table-column align="center" prop="deptShow" label="部门代码" width="110">
           </el-table-column>
-          <el-table-column align="center" label="操作" width="355">
+          <el-table-column align="center" prop="line" label="显示次序" width="70">
+          </el-table-column>
+          <el-table-column align="center" prop="positionShow" label="岗位职务" width="160">
+          </el-table-column>
+          <el-table-column align="center" prop="name" label="姓名" width="100">
+          </el-table-column>
+          <el-table-column align="center" prop="engName" label="英文姓名" width="100">
+          </el-table-column>
+          <el-table-column align="center" prop="code" label="工号" width="80">
+          </el-table-column>
+          <el-table-column align="center" prop="account" label="域账号" width="80">
+          </el-table-column>
+          <el-table-column align="center" prop="email" label="Email" width="100">
+          </el-table-column>
+          <el-table-column align="center" prop="idCardNumber" label="身份证号码" width="150">
+          </el-table-column>
+          <el-table-column align="center" prop="note1" label="备注" width="180">
+          </el-table-column>
+          <el-table-column align="center" prop="regionShow" label="地区代码" width="150">
+          </el-table-column>
+          <el-table-column align="center" label="操作" width="155">
             <template slot-scope="scope">
-              <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="primary" icon="el-icon-view" @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-view" @click="historyHandleView(scope.$index, scope.row)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <!-- 分页组件 -->
-        <!-- <Pagination v-bind:child-msg="pagination" @callFather="callFather"></Pagination> -->
+        <!-- 岗位变动历史分页组件 -->
+        <el-pagination v-if="historyPaginationShow" class="page-box" @size-change="historyHandleSizeChange" @current-change="historyHandleCurrentChange" background :current-page="historyPagination.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="historyPagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="historyPagination.total"></el-pagination>
       </el-tab-pane>
     </el-tabs>
     <!-- 人员设置新增/编辑界面 -->
     <el-dialog :title="personnelTitle" :visible.sync="personnelEditFormVisible" width="30%" @click="closeDialog" class="dialog">
-      <el-form label-width="120px" :model="personnelEditForm" :rules="personnelRules" ref="personnelEditForm">
+      <el-form label-width="120px" :model="personnelEditForm" :rules="personnelRules" ref="personnelEditForm" class="dialogForm">
         <el-form-item label="地区代码" prop="region">
           <el-input size="small" v-model="personnelEditForm.region" auto-complete="off" placeholder="请输入地区代码" class="comWidth"></el-input>
         </el-form-item>
@@ -154,50 +198,92 @@
       </div>
     </el-dialog>
     <!-- 人员设置详情界面 -->
-    <el-dialog title="详情" :visible.sync="personnelDetailsFormVisible" width="30%" @click="closeDialog()">
-      <div class="el-dialog-div">
-        <el-form label-width="120px" :model="personnelEditForm" ref="personnelEditForm" >
-          <el-form-item label="地区代码" prop="region">
-            <el-input size="small" v-text="personnelEditForm.region" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="部门名称" prop="dept">
-            <el-input size="small" v-text="personnelEditForm.dept" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="显示次序" prop="line">
-            <el-input size="small" v-text="personnelEditForm.line" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="岗位职务代码" prop="position">
-            <el-input size="small" v-text="personnelEditForm.position" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="姓名" prop="name">
-            <el-input size="small" v-text="personnelEditForm.name" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="英文姓名" prop="engName">
-            <el-input size="small" v-text="personnelEditForm.engName" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="工号" prop="code">
-            <el-input size="small" v-text="personnelEditForm.code" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="域账号" prop="account">
-            <el-input size="small" v-text="personnelEditForm.account" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="Email" prop="email">
-            <el-input size="small" v-text="personnelEditForm.email" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="身份证号码" prop="idCardNumber">
-            <el-input size="small" v-text="personnelEditForm.idCardNumber" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="note1">
-            <el-input size="small" v-text="personnelEditForm.note1" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
+    <el-dialog title="详情" :visible.sync="personnelDetailsFormVisible" width="30%" @click="closeDialog()" class="dialog">
+      <el-form label-width="120px" :model="personnelEditForm" ref="personnelEditForm" class="dialogForm">
+        <el-form-item label="地区代码" prop="region">
+          <el-input size="small" v-text="personnelEditForm.region" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="部门名称" prop="dept">
+          <el-input size="small" v-text="personnelEditForm.dept" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="显示次序" prop="line">
+          <el-input size="small" v-text="personnelEditForm.line" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="岗位职务代码" prop="position">
+          <el-input size="small" v-text="personnelEditForm.position" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input size="small" v-text="personnelEditForm.name" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="英文姓名" prop="engName">
+          <el-input size="small" v-text="personnelEditForm.engName" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="工号" prop="code">
+          <el-input size="small" v-text="personnelEditForm.code" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="域账号" prop="account">
+          <el-input size="small" v-text="personnelEditForm.account" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="Email" prop="email">
+          <el-input size="small" v-text="personnelEditForm.email" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号码" prop="idCardNumber">
+          <el-input size="small" v-text="personnelEditForm.idCardNumber" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="note1">
+          <el-input size="small" v-text="personnelEditForm.note1" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <!-- 岗位变动历史详情界面 -->
+    <el-dialog title="详情" :visible.sync="historyDetailsFormVisible" width="30%" @click="historyCloseDialog()" class="dialog">
+      <el-form label-width="120px" :model="historyDetailForm" ref="historyDetailForm" class="dialogForm">
+        <el-form-item label="开始时间" prop="startTime">
+          <el-input size="small" v-text="historyDetailForm.startTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="结束时间" prop="endTime">
+          <el-input size="small" v-text="historyDetailForm.endTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="部门代码" prop="deptShow">
+          <el-input size="small" v-text="historyDetailForm.deptShow" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="显示次序" prop="line">
+          <el-input size="small" v-text="historyDetailForm.line" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="岗位职务" prop="positionShow">
+          <el-input size="small" v-text="historyDetailForm.positionShow" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input size="small" v-text="historyDetailForm.name" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="英文姓名" prop="engName">
+          <el-input size="small" v-text="historyDetailForm.engName" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="工号" prop="code">
+          <el-input size="small" v-text="historyDetailForm.code" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="域账号" prop="account">
+          <el-input size="small" v-text="historyDetailForm.account" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="Email" prop="email">
+          <el-input size="small" v-text="historyDetailForm.email" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号码" prop="idCardNumber">
+          <el-input size="small" v-text="historyDetailForm.idCardNumber" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="note1">
+          <el-input size="small" v-text="historyDetailForm.note1" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="地区代码" prop="regionShow">
+          <el-input size="small" v-text="historyDetailForm.regionShow" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { personnelList, personnelSave, personnelDelete,personnelView,personnelUpdate } from '@/api/commonMG'
+import { personnelList, personnelSave, personnelDelete, personnelView, personnelUpdate, historyList, historySave, historyDelete, historyView, historyUpdate } from '@/api/commonMG'
 export default {
   data() {
     return {
@@ -206,7 +292,13 @@ export default {
       personnelPaginationShow:true, //控制分页页面显示与否
       personnelDetailsFormVisible: false, //详情页面显示与否
       personnelTitle: '添加',
+      historyPaginationShow:true, //控制分页页面显示与否
+      historyDetailsFormVisible: false, //详情页面显示与否
+      // historyTitle: '添加',
       codeDis: false,
+      historyCodeDis: false,
+      tabPosition: 'top',
+      activeName: '员工设置',
       personnelEditForm: {
         region: '',
         dept: '',
@@ -259,13 +351,13 @@ export default {
           }
         }}],
         account: [{ required: true, message: '请输入域账号', trigger: 'blur' }],
-        // email: [{ required: false, trigger: 'blur',validator:(rule,value,callback)=> {
-        //   if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/).test(value)){
-        //     callback(new Error('请输入正确的邮箱地址'))
-        //   }else{
-        //     callback()
-        //   }
-        // }}],
+        email: [{ required: false, trigger: 'blur',validator:(rule,value,callback)=> {
+          if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/).test(value)){
+            callback(new Error('请输入正确的邮箱地址'))
+          }else{
+            callback()
+          }
+        }}],
         idCardNumber: [{ required: true, trigger: 'change',validator:(rule,value,callback)=> {
           if(!(/^[0-9]*$/).test(value) || value.length != 18){
             callback(new Error('请输入18位数身份证号码'))
@@ -305,7 +397,41 @@ export default {
         pageSize: 10,
         total: 0
       },
-      params:{}
+      params:{},
+
+
+      // 岗位变动历史参数
+      historyDetailForm: {
+        startTime: '',
+        endTime: '',
+        dept: '',
+        deptShow: '',
+        line: '',
+        position: '',
+        positionShow: '',
+        code: '',
+      },
+      historyFormInline: {
+        region: '',
+        dept: '',
+        line: '',
+        position: '',
+        name: '',
+        engName: '',
+        code: '',
+        account: '',
+        email: '',
+        idCardNumber: '',
+        note1: '',
+      },
+      historyListData: [], //用户数据
+      // 分页参数
+      historyPagination: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0
+      },
+      historyParams:{},
     }
   },
   created() {
@@ -316,7 +442,14 @@ export default {
    * 里面的方法只有被调用才会执行
    */
   methods: {
-    // 获取公司列表
+    handleClick(tab) {
+        if(tab.name == '人员设置'){
+          this.getdata()
+        }else{
+          this.historyGetdata()
+        }
+    },
+    // 获取人员列表
     getdata() {
       this.loading = true
       this.params = {
@@ -419,11 +552,11 @@ export default {
     // 编辑、增加页面保存方法
     submitForm(personnelEditForm) {
       if(this.personnelTitle == "添加"){
-        console.log(this.personnelEditForm);
         this.$refs[personnelEditForm].validate(valid => {
           if (valid) {
             personnelSave(this.personnelEditForm)
               .then(res => {
+                console.log(res)
                 this.personnelEditFormVisible = false
                 this.loading = false
                 if (res.success) {
@@ -528,34 +661,93 @@ export default {
     handleCurrentChange(val) {
       this.pagination.currentPage = val
       this.getdata()
-    }
+    },
+
+    // 岗位变动历史页面方法
+    // 获取岗位历史变动页面列表
+    historyGetdata() {
+      this.loading = true
+      this.historyParams = {
+        region:this.historyFormInline.region,
+        dept:this.historyFormInline.dept,
+        line:this.historyFormInline.line,
+        position:this.historyFormInline.position,
+        name:this.historyFormInline.name,
+        engName:this.historyFormInline.engName,
+        code:this.historyFormInline.code,
+        account:this.historyFormInline.account,
+        email:this.historyFormInline.email,
+        idCardNumber:this.historyFormInline.idCardNumber,
+        note1:this.historyFormInline.note1,
+        currentPage:this.historyPagination.currentPage,
+        pageSize:this.historyPagination.pageSize
+      }
+      historyList(this.historyParams).then(res =>{
+        this.loading = false
+        if(res.success == false){
+          this.$message({
+               type: 'info',
+               message: res.errors
+          })
+        }else{
+          this.historyListData = res.result
+          this.historyPagination.total = res.total
+          this.$refs.historyConfigurationTable.$el.style.width = '98%'
+        }
+      }).catch(error =>{
+        this.loading = false
+        this.$message({
+            type: 'info',
+            message: error
+        })
+      })
+    },
+    // 搜索事件
+    historySearch() {
+      this.historyPaginationShow = false
+      this.historyHandleCurrentChange(1)
+      this.$nextTick(function () {
+        this.historyPaginationShow = true;
+      })
+      this.historyGetdata()
+    },
+    // 显示详情页
+    historyHandleView:function(index,row){
+      this.historyDetailsFormVisible = true
+      this.historyDetailForm.startTime = row.startTime
+      this.historyDetailForm.endTime = row.endTime
+      this.historyDetailForm.deptShow = row.deptShow
+      this.historyDetailForm.line = row.line
+      this.historyDetailForm.positionShow = row.positionShow
+      this.historyDetailForm.name = row.name
+      this.historyDetailForm.engName = row.engName
+      this.historyDetailForm.code = row.code
+      this.historyDetailForm.account = row.account
+      this.historyDetailForm.email = row.email
+      this.historyDetailForm.idCardNumber = row.idCardNumber
+      this.historyDetailForm.note1 = row.note1
+      this.historyDetailForm.regionShow = row.regionShow
+    },
+    // 关闭编辑、增加弹出框
+    historyCloseDialog() {
+      this.historyDetailsFormVisible = false
+    },
+    // 分页组件的当前页和分页变化
+    historyHandleSizeChange(val) {
+      this.historyPagination.pageSize = val
+      this.historyGetdata()
+    },
+    historyHandleCurrentChange(val) {
+      this.historyPagination.currentPage = val
+      this.historyGetdata()
+    },
   }
 }
 </script>
 
 <style scoped>
-.el-form--inline .el-form-item {
-  margin-right: 9px;
-}
-.comWidth {
-  width:240px
-}
-.page-box {
-  margin: 10px auto;
-}
-.el-dialog__body {
-  padding: 0px 20px;
-}
-.el-form-item {
-  margin-bottom: 12px;
-}
-.el-form-item__error {
-  padding-top: 0px;
-}
-.el-dialog-div {
-  width: 100%;
-  height: 500px;
-  overflow: auto;
+.dialog /deep/ .historyForm{
+  height: 320px
 }
 </style>
 

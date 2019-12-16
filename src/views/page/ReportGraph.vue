@@ -3,12 +3,12 @@
     <!-- 搜索筛选 -->
     <el-form :inline="true" :model="reportFormInline" class="user-search">
       <el-form-item>
-        <el-select v-model="areaValue" placeholder="请选择" style="width:188px;height:32px">
+        <el-select v-model="areaValue" placeholder="请选择">
           <el-option size="small" v-for="item in areaOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="timeValue" placeholder="请选择" style="width:188px;height:32px">
+        <el-select v-model="timeValue" placeholder="请选择">
           <el-option size="small" v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
@@ -16,7 +16,7 @@
         <el-input size="small" v-model="reportFormInline.ttime" placeholder="输入时间"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input size="small" v-model="reportFormInline.provinceCode" placeholder="输入地区代码"></el-input>
+        <el-input size="small" v-model="reportFormInline.region" placeholder="输入地区代码"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
@@ -87,97 +87,95 @@
       </el-table-column>
     </el-table>
     <!-- 分页组件 -->
-    <el-pagination v-if="reportPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[200, 500, 1000, 2000]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
+    <el-pagination v-if="reportPaginationShow" class="page-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" background :current-page="pagination.currentPage" :page-sizes="[100,200, 500, 1000, 2000]" :page-size="pagination.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"></el-pagination>
     <!-- 报表图形详情界面 -->
-    <el-dialog title="详情" :visible.sync="reportDetailsFormVisible" width="30%" @click="closeDialog()">
-      <div class="el-dialog-div">
-        <el-form label-width="140px" :model="reportDetailsForm" ref="reportDetailsForm" >
-          <el-form-item label="时间" prop="ttime">
-            <el-input size="small" v-text="reportDetailsForm.ttime" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="地区代码" prop="provinceCode">
-            <el-input size="small" v-text="reportDetailsForm.provinceCode" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="地区名称" prop="provinceName">
-            <el-input size="small" v-text="reportDetailsForm.provinceName" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="呼入数量" prop="callInNumber">
-            <el-input size="small" v-text="reportDetailsForm.callInNumber" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="接通数量" prop="connectionNumber">
-            <el-input size="small" v-text="reportDetailsForm.connectionNumber" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="接通率" prop="connectionRate">
-            <el-input size="small" v-text="reportDetailsForm.connectionRate" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="呼入时长" prop="callTime">
-            <el-input size="small" v-text="reportDetailsForm.callTime" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="坐席时长" prop="queueTime">
-            <el-input size="small" v-text="reportDetailsForm.queueTime" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="平均呼入时间" prop="avgCallInTIme">
-            <el-input size="small" v-text="reportDetailsForm.avgCallInTIme" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="坐席未接数量" prop="answerNo">
-            <el-input size="small" v-text="reportDetailsForm.answerNo" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="坐席未接率" prop="answerNoRate">
-            <el-input size="small" v-text="reportDetailsForm.answerNoRate" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="坐席应答数量" prop="answer">
-            <el-input size="small" v-text="reportDetailsForm.answer" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="坐席应答率" prop="answerRate">
-            <el-input size="small" v-text="reportDetailsForm.answerRate" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="05秒内坐席应答数量" prop="answer5">
-            <el-input size="small" v-text="reportDetailsForm.answer5" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="05秒内坐席应答率" prop="answer5Rate">
-            <el-input size="small" v-text="reportDetailsForm.answer5Rate" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="20秒内坐席应答数量" prop="answer20">
-            <el-input size="small" v-text="reportDetailsForm.answer20" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="20秒内坐席应答率" prop="answer20Rate">
-            <el-input size="small" v-text="reportDetailsForm.answer20Rate" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="坐席平均时间" prop="avgQueueTime">
-            <el-input size="small" v-text="reportDetailsForm.avgQueueTime" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键0" prop="k0">
-            <el-input size="small" v-text="reportDetailsForm.k0" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键1" prop="k1">
-            <el-input size="small" v-text="reportDetailsForm.k1" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键2" prop="k2">
-            <el-input size="small" v-text="reportDetailsForm.k2" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键3" prop="k3">
-            <el-input size="small" v-text="reportDetailsForm.k3" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键4" prop="k4">
-            <el-input size="small" v-text="reportDetailsForm.k4" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键5" prop="k5">
-            <el-input size="small" v-text="reportDetailsForm.k5" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键6" prop="k6">
-            <el-input size="small" v-text="reportDetailsForm.k6" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键7" prop="k7">
-            <el-input size="small" v-text="reportDetailsForm.k7" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键8" prop="k8">
-            <el-input size="small" v-text="reportDetailsForm.k8" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-          <el-form-item label="按键9" prop="k9">
-            <el-input size="small" v-text="reportDetailsForm.k9" :disabled="true"  class="comWidth"></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
+    <el-dialog title="详情" :visible.sync="reportDetailsFormVisible" width="30%" @click="closeDialog()" class="dialog">
+      <el-form label-width="140px" :model="reportDetailsForm" ref="reportDetailsForm" class="dialogForm">
+        <el-form-item label="时间" prop="ttime">
+          <el-input size="small" v-text="reportDetailsForm.ttime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="地区代码" prop="provinceCode">
+          <el-input size="small" v-text="reportDetailsForm.provinceCode" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="地区名称" prop="provinceName">
+          <el-input size="small" v-text="reportDetailsForm.provinceName" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="呼入数量" prop="callInNumber">
+          <el-input size="small" v-text="reportDetailsForm.callInNumber" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="接通数量" prop="connectionNumber">
+          <el-input size="small" v-text="reportDetailsForm.connectionNumber" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="接通率" prop="connectionRate">
+          <el-input size="small" v-text="reportDetailsForm.connectionRate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="呼入时长" prop="callTime">
+          <el-input size="small" v-text="reportDetailsForm.callTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席时长" prop="queueTime">
+          <el-input size="small" v-text="reportDetailsForm.queueTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="平均呼入时间" prop="avgCallInTIme">
+          <el-input size="small" v-text="reportDetailsForm.avgCallInTIme" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席未接数量" prop="answerNo">
+          <el-input size="small" v-text="reportDetailsForm.answerNo" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席未接率" prop="answerNoRate">
+          <el-input size="small" v-text="reportDetailsForm.answerNoRate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席应答数量" prop="answer">
+          <el-input size="small" v-text="reportDetailsForm.answer" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席应答率" prop="answerRate">
+          <el-input size="small" v-text="reportDetailsForm.answerRate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="05秒内坐席应答数量" prop="answer5">
+          <el-input size="small" v-text="reportDetailsForm.answer5" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="05秒内坐席应答率" prop="answer5Rate">
+          <el-input size="small" v-text="reportDetailsForm.answer5Rate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="20秒内坐席应答数量" prop="answer20">
+          <el-input size="small" v-text="reportDetailsForm.answer20" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="20秒内坐席应答率" prop="answer20Rate">
+          <el-input size="small" v-text="reportDetailsForm.answer20Rate" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="坐席平均时间" prop="avgQueueTime">
+          <el-input size="small" v-text="reportDetailsForm.avgQueueTime" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键0" prop="k0">
+          <el-input size="small" v-text="reportDetailsForm.k0" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键1" prop="k1">
+          <el-input size="small" v-text="reportDetailsForm.k1" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键2" prop="k2">
+          <el-input size="small" v-text="reportDetailsForm.k2" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键3" prop="k3">
+          <el-input size="small" v-text="reportDetailsForm.k3" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键4" prop="k4">
+          <el-input size="small" v-text="reportDetailsForm.k4" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键5" prop="k5">
+          <el-input size="small" v-text="reportDetailsForm.k5" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键6" prop="k6">
+          <el-input size="small" v-text="reportDetailsForm.k6" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键7" prop="k7">
+          <el-input size="small" v-text="reportDetailsForm.k7" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键8" prop="k8">
+          <el-input size="small" v-text="reportDetailsForm.k8" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+        <el-form-item label="按键9" prop="k9">
+          <el-input size="small" v-text="reportDetailsForm.k9" :disabled="true"  class="comWidth"></el-input>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -192,7 +190,7 @@ export default {
       reportDetailsFormVisible: false, //详情页面显示与否
       reportFormInline: {
         ttime: '',
-        provinceCode: '',
+        region: '',
       },
       reportDetailsForm: {
         ttime: '',
@@ -228,7 +226,7 @@ export default {
       // 分页参数
       pagination: {
         currentPage: 1,
-        pageSize: 200,
+        pageSize: 100,
         total: 0
       },
       areaOptions: [{
@@ -253,13 +251,11 @@ export default {
       }],
       areaValue: 1,
       timeValue: 10,
-      code:'',
       params:{}
     }
   },
   created() {
-    let userData = JSON.parse(localStorage.getItem('userdata'));
-    this.code = userData.code.substring(0,2) + '0000'
+    this.reportFormInline.region = JSON.parse(localStorage.getItem('userdata')).region.substring(0,2);
     this.getdata()
   },
 
@@ -273,7 +269,7 @@ export default {
       this.params = {
         ttime:this.reportFormInline.ttime,
         provinceCode:this.reportFormInline.provinceCode,
-        code:this.code,
+        region:this.reportFormInline.region,
         codeNumber:this.areaValue,
         timeNumber:this.timeValue,
         currentPage:this.pagination.currentPage,
@@ -311,7 +307,6 @@ export default {
     // 显示详情页
     handleView:function(index,row){
       this.reportDetailsFormVisible = true
-      console.log(row)
       this.reportDetailsForm.ttime = row.ttime
       this.reportDetailsForm.provinceCode = row.provinceCode
       this.reportDetailsForm.provinceName = row.provinceName
@@ -361,32 +356,6 @@ export default {
 </script>
 
 <style scoped>
-.el-form--inline .el-form-item {
-  margin-right: 9px;
-}
-.comWidth {
-  width:240px
-}
-.page-box {
-  margin: 10px auto;
-}
-.el-dialog__body {
-  padding: 0px 20px
-}
-.el-form-item {
-  margin-bottom: 12px
-}
-.el-form-item__error {
-  padding-top: 0px
-}
-.el-dialog-div {
-  width: 100%;
-  height: 500px;
-  overflow: auto
-}
-.el-select /deep/ .el-input__inner {
-  height: 32px;
-}
 </style>
 
  
