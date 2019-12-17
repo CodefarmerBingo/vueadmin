@@ -118,7 +118,7 @@ export default new Router({
             }
         },{
             path: '/page/Welcome',
-            name: '客户信息',
+            name: '欢迎页',
             component: Welcome,
             meta: {
                 requireAuth: true
