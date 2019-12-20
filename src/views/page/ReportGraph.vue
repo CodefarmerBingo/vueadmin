@@ -23,7 +23,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" height="490" ref="configurationTable" :data="reportListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+    <el-table size="small" height="490" stripe ref="configurationTable" :data="reportListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
       <el-table-column align="center" prop="ttime" label="时间" width="120">
       </el-table-column>
       <el-table-column align="center" prop="provinceCode" label="地区代码" width="70">
@@ -80,9 +80,9 @@
       </el-table-column>
       <el-table-column align="center" prop="k9" label="按键9" width="55">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="100">
+      <el-table-column align="center" label="操作" width="65" fixed="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)" circle title="详情"></el-button>
         </template>
       </el-table-column>
     </el-table>

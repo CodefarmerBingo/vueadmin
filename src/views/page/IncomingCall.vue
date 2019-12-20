@@ -22,7 +22,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" height="490" ref="configurationTable" :data="callListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+    <el-table size="small" height="490" stripe ref="configurationTable" :data="callListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
       <el-table-column align="center" prop="monthNo" label="日期段" width="60">
       </el-table-column>
       <el-table-column align="center" prop="flowNo" label="呼叫流水号" width="150">
@@ -145,9 +145,9 @@
       </el-table-column>
       <el-table-column align="center" prop="differenceKey2" label="二级分键" width="80">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="100">
+      <el-table-column align="center" label="操作" width="65" fixed="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)" circle title="详情"></el-button>
         </template>
       </el-table-column>
     </el-table>

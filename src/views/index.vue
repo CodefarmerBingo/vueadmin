@@ -68,7 +68,7 @@ export default {
   margin: 0px;
 }
 .asideshow {
-  width: 190px !important;
+  width: 200px !important;
   height: 100%;
   background-color: #334157;
   margin: 0px;

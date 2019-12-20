@@ -14,14 +14,14 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" height="488" :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
-      <el-table-column align="center" prop="code" label="岗位职务代码" width="225">
+    <el-table size="small" height="488" stripe :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column align="center" prop="code" label="岗位职务代码" width="235">
       </el-table-column>
-      <el-table-column align="center" prop="name" label="岗位职务名称" width="225">
+      <el-table-column align="center" prop="name" label="岗位职务名称" width="235">
       </el-table-column>
-      <el-table-column align="center" prop="note1" label="主管岗位职务代码" width="225">
+      <el-table-column align="center" prop="note1" label="主管岗位职务代码" width="235">
       </el-table-column>
-      <el-table-column align="center" prop="note2" label="备注" width="225">
+      <el-table-column align="center" prop="note2" label="备注" width="235">
       </el-table-column>
       <el-table-column align="center" label="操作" width="355">
         <template slot-scope="scope">

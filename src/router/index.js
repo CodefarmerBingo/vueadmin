@@ -13,8 +13,6 @@ import index from '@/views/index';
 /**
  * 基础菜单
  */
-// // 商品管理
-import Goods from '@/views/goods/Goods';
 // 部门设置界面
 import Departmental from '@/views/page/Departmental';
 // 岗位设置界面

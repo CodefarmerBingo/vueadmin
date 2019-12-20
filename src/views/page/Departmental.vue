@@ -14,16 +14,16 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中" height="488">
-      <el-table-column align="center" prop="code" label="部门代码" min-width="17%">
+    <el-table size="small" :data="listData" stripe highlight-current-row v-loading="loading" border element-loading-text="拼命加载中" height="488">
+      <el-table-column align="center" prop="code" label="部门代码" width="235">
       </el-table-column>
-      <el-table-column align="center" prop="name" label="部门名称" min-width="17%">
+      <el-table-column align="center" prop="name" label="部门名称" width="235">
       </el-table-column>
-      <el-table-column align="center" prop="note1" label="部门设立日期" min-width="17%">
+      <el-table-column align="center" prop="note1" label="部门设立日期" width="235">
       </el-table-column>
-      <el-table-column align="center" prop="note2" label="部门撤销日期" min-width="17%">
+      <el-table-column align="center" prop="note2" label="部门撤销日期" width="235">
       </el-table-column>
-      <el-table-column align="center" label="操作" min-width="32%">
+      <el-table-column align="center" label="操作" width="355">
         <template slot-scope="scope">
           <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>

@@ -43,7 +43,7 @@
           </el-form-item>
         </el-form>
         <!-- 员工设置列表-->
-        <el-table size="small" height="490" ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+        <el-table size="small" height="490" stripe ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="region" label="地区代码/名称" width="150">
           </el-table-column>
           <el-table-column align="center" prop="dept" label="部门代码/名称" width="250">
@@ -66,11 +66,11 @@
           </el-table-column>
           <el-table-column align="center" prop="note1" label="备注" width="180">
           </el-table-column>
-          <el-table-column align="center" label="操作" width="300">
+          <el-table-column align="center" label="操作" width="140" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)" circle title="编辑"></el-button>
+              <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)" circle title="详情"></el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.$index, scope.row)" circle title="删除"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -118,7 +118,7 @@
           </el-form-item>
         </el-form>
         <!-- 岗位变动历史列表 -->
-        <el-table size="small" height="490" ref="historyConfigurationTable" :data="historyListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+        <el-table size="small" height="490" stripe ref="historyConfigurationTable" :data="historyListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="startTime" label="开始时间" width="90">
           </el-table-column>
           <el-table-column align="center" prop="endTime" label="结束时间" width="90">
@@ -145,9 +145,9 @@
           </el-table-column>
           <el-table-column align="center" prop="regionShow" label="地区代码" width="150">
           </el-table-column>
-          <el-table-column align="center" label="操作" width="155">
+          <el-table-column align="center" label="操作" width="65" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-view" @click="historyHandleView(scope.$index, scope.row)">详情</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-view" @click="historyHandleView(scope.$index, scope.row)" circle title="详情"></el-button>
             </template>
           </el-table-column>
         </el-table>

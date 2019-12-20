@@ -28,7 +28,7 @@
       </el-form-item>
     </el-form>
     <!--列表-->
-    <el-table size="small" height="490" ref="configurationTable" :data="customerListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+    <el-table size="small" height="490" ref="configurationTable" stripe :data="customerListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
       <el-table-column align="center" prop="customerId" label="客户编号" width="130">
       </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称" width="230">
@@ -51,9 +51,9 @@
       </el-table-column>
       <el-table-column align="center" prop="updateTime" label="更新时间" width="200">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="120">
+      <el-table-column align="center" label="操作" width="65" fixed="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)" circle title="详情"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -175,7 +175,7 @@ export default {
         if(res.success){
           this.customerListData = res.result;
           this.pagination.total = res.total
-          this.$refs.configurationTable.$el.style.width = '98%'
+          this.$refs.configurationTable.$el.style.width = '99%'
         }else{
           if(res.code == '403'){
             this.$message({

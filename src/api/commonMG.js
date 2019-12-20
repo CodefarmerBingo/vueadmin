@@ -73,6 +73,24 @@ export const historyUpdate = (params) => { return req("post", "platform-web/work
 export const historyDelete = (params) => { return  axios.delete("platform-web/workerHistory/delete?code=" + params)};
 
 /**
+ * 权限管理
+ **/
+// 权限管理-获取部门菜单
+export const deptMenu = (params) => { return req("get", "platform-web/permission/user/getDeptDto" , params) };
+// 权限管理-获取地区菜单
+export const areaMenu = (params) => { return req("get", "platform-web/permission/user/getCityDto" , params) };
+// 权限管理-获取表格数据
+export const getTable = (params) => { return req("post", "platform-web/permission/user/getByWorker" , params) };
+// 权限管理-获取所有权限菜单
+export const privilegeAllList = (accountCode,code) => { return req("post", "platform-web/permission/user/notExistAuthority?accountCode=" + accountCode + "&code=" + code) };
+// 权限管理-获取已授权权限菜单
+export const privilegeExitList = (params) => { return req("post", "platform-web/permission/user/existAuthority?code=" + params) };
+// 权限管理-点击授权权限
+export const privilegeAdd = (params) => { return req("post", "platform-web/permission/user/insert", params) };
+// 权限管理-点击删除权限
+export const privilegeDelete = (params) => { return req("post", "platform-web/permission/user/delete" , params) };
+
+/**
  * 客户信息
  **/
 // 客户信息-获取数据列表
@@ -89,41 +107,3 @@ export const telRecordList = (params) => { return req("post", "platform-web/repo
  **/
 // 来电记录-获取数据列表
 export const reportList = (params) => { return req("post", "platform-web/report/page", params) };
-
-/**
- * 菜单管理
- **/
-// 菜单管理-获取菜单Module/list
-export const ModuleList = () => { return req("post", "/api/Module/list") };
-// 菜单管理-根据菜单获取数据
-export const ModuleGet = (params) => { return axios.get("/api/Module/get/" + params + "?token=" + localStorage.getItem('logintoken')) };
-// 菜单管理-获取父级菜单Module/nodes
-export const ModuleNodes = (params) => { return req("post", "/api/Module/nodes", params) };
-// 菜单管理-修改菜单
-export const ModuleSave = (params) => { return req("post", "/api/Module/save", params) };
-// 菜单管理-删除菜单
-export const ModuleDelete = (params) => { return axios.delete("/api/Module/delete?ids=" + params + "&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
-
-/**
- * 系统环境变量 
- **/
-// 系统环境变量-获取系统环境变量列表
-export const variableList = (params) => { return req("post", "/api/Variable/list", params) };
-// 系统环境变量-保存（添加编辑）
-export const variableSave = (params) => { return req("post", "/api/Variable/save", params) };
-// 系统环境变量-删除系统环境变量
-export const variableDelete = (params) => { return axios.delete("/api/Variable/delete?ids=" + params + "&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
-
-/**
- * 权限管理 
- **/
-// 权限管理-获取权限列表
-export const permissionList = (params) => { return req("post", "/api/Permission/list", params) };
-// 权限管理-保存权限
-export const ermissionSave = (params) => { return req("post", "/api/Permission/save", params) };
-// 权限管理-删除权限
-export const ermissionDelete = (params) => { return axios.delete("/api/Permission/delete?ids=" + params + "&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
-// 权限管理-获取权限
-export const roleDropDown = () => { return axios.get("/api/Role/dropDown/all?&token=" + localStorage.getItem('logintoken')).then(res => res.data) };
-// 权限管理-配置权限
-export const RolePermission = (params) => { return req("post", "/api/RolePermission/save", params) };
