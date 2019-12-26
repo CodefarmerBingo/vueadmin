@@ -264,7 +264,6 @@ export default {
           })
         }
         let params = {code:this.priviCode,regions:this.areaSelectList,privileges:priviAllList}
-        console.log(params.privileges)
         privilegeAdd(params).then(res => {
           console.log(res)
           if(res.success){
@@ -292,8 +291,18 @@ export default {
     },
     // 删除权限
     deletePrivi(){
-      if(this.priviExitSelectList.length != 0){
-        privilegeDelete(this.priviExitSelectList).then(res => {
+      let priviExitList = []
+      for(var i=0;i<this.priviExitSelectList.length;i++){
+        priviExitList.push({
+          code:this.priviExitSelectList[i].code,
+          function:this.priviExitSelectList[i].function,
+          privilege:this.priviExitSelectList[i].privilege,
+          region:this.priviExitSelectList[i].region,
+        })
+      }
+      console.log(priviExitList)
+      if(priviExitList.length != 0){
+        privilegeDelete(priviExitList).then(res => {
           privilegeExitList(this.priviCode).then(res => {
             if(res.success){
               this.$refs.priviAllListTable.clearSelection();
