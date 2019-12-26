@@ -256,8 +256,15 @@ export default {
         })
         return
       }else{
-        let params = {code:this.priviCode,regions:this.areaSelectList,privileges:this.priviAllSelectList}
-        console.log(params)
+        let priviAllList = []
+        for(var i=0;i<this.priviAllSelectList.length;i++){
+          priviAllList.push({
+            function:this.priviAllSelectList[i].function,
+            privilege:this.priviAllSelectList[i].privilege
+          })
+        }
+        let params = {code:this.priviCode,regions:this.areaSelectList,privileges:priviAllList}
+        console.log(params.privileges)
         privilegeAdd(params).then(res => {
           console.log(res)
           if(res.success){
