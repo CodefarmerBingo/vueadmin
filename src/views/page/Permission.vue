@@ -257,7 +257,9 @@ export default {
         return
       }else{
         let params = {code:this.priviCode,regions:this.areaSelectList,privileges:this.priviAllSelectList}
+        console.log(params)
         privilegeAdd(params).then(res => {
+          console.log(res)
           if(res.success){
             this.$refs.priviAllListTable.clearSelection();
             privilegeExitList(this.priviCode).then(res => {

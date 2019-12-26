@@ -5,16 +5,16 @@
         <!-- 员工设置搜索筛选 -->
         <el-form :inline="true" :model="personnelFormInline">
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.region" placeholder="输入地区代码"></el-input>
+            <el-input size="small" v-model="personnelFormInline.region" maxlength="6" show-word-limit placeholder="输入地区代码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.dept" placeholder="输入部门代码"></el-input>
+            <el-input size="small" v-model="personnelFormInline.dept" maxlength="12" show-word-limit placeholder="输入部门代码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.line" placeholder="输入显示次序"></el-input>
+            <el-input size="small" v-model="personnelFormInline.line" maxlength="4" show-word-limit placeholder="输入显示次序"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.position" placeholder="输入岗位职务"></el-input>
+            <el-input size="small" v-model="personnelFormInline.position" maxlength="8" show-word-limit placeholder="输入岗位职务"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input size="small" v-model="personnelFormInline.name" placeholder="输入姓名"></el-input>
@@ -23,7 +23,7 @@
             <el-input size="small" v-model="personnelFormInline.engName" placeholder="输入英文姓名"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.code" placeholder="输入工号"></el-input>
+            <el-input size="small" v-model="personnelFormInline.code" maxlength="8" show-word-limit placeholder="输入工号"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input size="small" v-model="personnelFormInline.account" placeholder="输入域账号"></el-input>
@@ -32,7 +32,7 @@
             <el-input size="small" v-model="personnelFormInline.email" placeholder="输入Email"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="personnelFormInline.idCardNumber" placeholder="输入身份证号"></el-input>
+            <el-input size="small" v-model="personnelFormInline.idCardNumber" maxlength="18" show-word-limit placeholder="输入身份证号"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input size="small" v-model="personnelFormInline.note1" placeholder="输入备注"></el-input>
@@ -43,7 +43,7 @@
           </el-form-item>
         </el-form>
         <!-- 员工设置列表-->
-        <el-table size="small" height="490" stripe ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+        <el-table size="small" height="460" stripe ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="region" label="地区代码/名称" width="150">
           </el-table-column>
           <el-table-column align="center" prop="dept" label="部门代码/名称" width="250">
@@ -52,7 +52,7 @@
           </el-table-column>
           <el-table-column align="center" prop="position" label="岗位职务代码/名称" width="170">
           </el-table-column>
-          <el-table-column align="center" prop="name" label="姓名" width="80">
+          <el-table-column align="center" prop="name" label="姓名" width="100">
           </el-table-column>
           <el-table-column align="center" prop="engName" label="英文姓名" width="80">
           </el-table-column>
@@ -81,16 +81,16 @@
         <!-- 岗位变动历史搜索筛选 -->
         <el-form :inline="true" :model="historyFormInline">
           <el-form-item>
-            <el-input size="small" v-model="historyFormInline.region" placeholder="输入地区代码"></el-input>
+            <el-input size="small" maxlength="6" show-word-limit v-model="historyFormInline.region" placeholder="输入地区代码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="historyFormInline.dept" placeholder="输入部门代码"></el-input>
+            <el-input size="small" maxlength="12" show-word-limit v-model="historyFormInline.dept" placeholder="输入部门代码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="historyFormInline.line" placeholder="输入显示次序"></el-input>
+            <el-input size="small" maxlength="4" show-word-limit v-model="historyFormInline.line" placeholder="输入显示次序"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="historyFormInline.position" placeholder="输入岗位职务"></el-input>
+            <el-input size="small" maxlength="8" show-word-limit v-model="historyFormInline.position" placeholder="输入岗位职务代码"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input size="small" v-model="historyFormInline.name" placeholder="输入姓名"></el-input>
@@ -99,7 +99,7 @@
             <el-input size="small" v-model="historyFormInline.engName" placeholder="输入英文姓名"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="historyFormInline.code" placeholder="输入工号"></el-input>
+            <el-input size="small" maxlength="8" show-word-limit v-model="historyFormInline.code" placeholder="输入工号"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input size="small" v-model="historyFormInline.account" placeholder="输入域账号"></el-input>
@@ -108,7 +108,7 @@
             <el-input size="small" v-model="historyFormInline.email" placeholder="输入Email"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input size="small" v-model="historyFormInline.idCardNumber" placeholder="输入身份证号码"></el-input>
+            <el-input size="small" maxlength="18" show-word-limit v-model="historyFormInline.idCardNumber" placeholder="输入身份证号码"></el-input>
           </el-form-item>
           <el-form-item>
             <el-input size="small" v-model="historyFormInline.note1" placeholder="输入备注"></el-input>
@@ -118,7 +118,7 @@
           </el-form-item>
         </el-form>
         <!-- 岗位变动历史列表 -->
-        <el-table size="small" height="490" stripe ref="historyConfigurationTable" :data="historyListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+        <el-table size="small" height="460" stripe ref="historyConfigurationTable" :data="historyListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
           <el-table-column align="center" prop="startTime" label="开始时间" width="90">
           </el-table-column>
           <el-table-column align="center" prop="endTime" label="结束时间" width="90">
@@ -156,19 +156,19 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 人员设置新增/编辑界面 -->
-    <el-dialog :title="personnelTitle" :visible.sync="personnelEditFormVisible" width="30%" @click="closeDialog" class="dialog">
+    <el-dialog :title="personnelTitle" :visible.sync="personnelEditFormVisible" width="30%" @click="closeDialog" class="dialog" v-if="personnelEditFormVisible">
       <el-form label-width="120px" :model="personnelEditForm" :rules="personnelRules" ref="personnelEditForm" class="dialogForm">
         <el-form-item label="地区代码" prop="region">
-          <el-input size="small" v-model="personnelEditForm.region" auto-complete="off" placeholder="请输入地区代码" class="comWidth"></el-input>
+          <el-input size="small" v-model="personnelEditForm.region" maxlength="6" show-word-limit auto-complete="off" placeholder="请输入地区代码" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="部门代码" prop="dept">
-          <el-input size="small" v-model="personnelEditForm.dept" auto-complete="off" placeholder="请输入部门代码" class="comWidth"></el-input>
+          <el-input size="small" v-model="personnelEditForm.dept" maxlength="12" show-word-limit auto-complete="off" placeholder="请输入部门代码" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="显示次序" prop="line">
-          <el-input size="small" v-model="personnelEditForm.line" auto-complete="off" placeholder="请输入显示次序" class="comWidth"></el-input>
+          <el-input size="small" v-model="personnelEditForm.line" maxlength="4" show-word-limit auto-complete="off" placeholder="请输入显示次序" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="岗位职务代码" prop="position">
-          <el-input size="small" v-model="personnelEditForm.position" auto-complete="off" placeholder="请输入岗位职务代码" class="comWidth"></el-input>
+          <el-input size="small" v-model="personnelEditForm.position" maxlength="8" show-word-limit auto-complete="off" placeholder="请输入岗位职务代码" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input size="small" v-model="personnelEditForm.name" auto-complete="off" placeholder="请输入姓名" class="comWidth"></el-input>
@@ -177,7 +177,7 @@
           <el-input size="small" v-model="personnelEditForm.engName" auto-complete="off" placeholder="请输入英文姓名" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="工号" prop="code">
-          <el-input size="small" v-model="personnelEditForm.code" auto-complete="off" placeholder="请输入工号" class="comWidth" :disabled="codeDis"></el-input>
+          <el-input size="small" v-model="personnelEditForm.code" maxlength="8" show-word-limit auto-complete="off" placeholder="请输入工号" class="comWidth" :disabled="codeDis"></el-input>
         </el-form-item>
         <el-form-item label="域账号" prop="account">
           <el-input size="small" v-model="personnelEditForm.account" auto-complete="off" placeholder="请输入域账号" class="comWidth"></el-input>
@@ -186,7 +186,7 @@
           <el-input size="small" v-model="personnelEditForm.email" auto-complete="off" placeholder="请输入Email" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="身份证号码" prop="idCardNumber">
-          <el-input size="small" v-model="personnelEditForm.idCardNumber" auto-complete="off" placeholder="请输入身份证号码" class="comWidth"></el-input>
+          <el-input size="small" v-model="personnelEditForm.idCardNumber" maxlength="18" show-word-limit auto-complete="off" placeholder="请输入身份证号码" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="note1">
           <el-input size="small" v-model="personnelEditForm.note1" auto-complete="off" placeholder="请输入备注" class="comWidth"></el-input>
@@ -294,7 +294,6 @@ export default {
       personnelTitle: '添加',
       historyPaginationShow:true, //控制分页页面显示与否
       historyDetailsFormVisible: false, //详情页面显示与否
-      // historyTitle: '添加',
       codeDis: false,
       historyCodeDis: false,
       tabPosition: 'top',
@@ -352,10 +351,14 @@ export default {
         }}],
         account: [{ required: true, message: '请输入域账号', trigger: 'blur' }],
         email: [{ required: false, trigger: 'blur',validator:(rule,value,callback)=> {
-          if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/).test(value)){
-            callback(new Error('请输入正确的邮箱地址'))
+          if(value==''||value==undefined||value==null){
+            callback();
           }else{
-            callback()
+            if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/).test(value)){
+              callback(new Error('请输入正确的邮箱地址'))
+            }else{
+              callback()
+            }
           }
         }}],
         idCardNumber: [{ required: true, trigger: 'change',validator:(rule,value,callback)=> {
@@ -496,7 +499,6 @@ export default {
       this.$nextTick(function () {
         this.personnelPaginationShow = true;
       })
-      this.getdata()
     },
     // 显示新增界面
     handleAdd: function(index, row) {
@@ -654,6 +656,7 @@ export default {
     closeDialog() {
       this.personnelEditFormVisible = false
       this.personnelDetailsFormVisible = false
+      // this.$refs[personnelEditForm].resetFields();
     },
     // 分页组件的当前页和分页变化
     handleSizeChange(val) {

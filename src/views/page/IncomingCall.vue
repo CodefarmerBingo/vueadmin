@@ -340,6 +340,7 @@ export default {
       reportList(this.params).then(res =>{
         this.loading = false
         if(res.success){
+          console.log(res.result)
           this.callListData = res.result;
           this.pagination.total = res.total
           this.$refs.configurationTable.$el.style.width = '98%'
@@ -366,7 +367,6 @@ export default {
       this.$nextTick(function () {
         this.callPaginationShow = true;
       })
-      this.getdata()
     },
     // 显示详情页
     handleView:function(index,row){

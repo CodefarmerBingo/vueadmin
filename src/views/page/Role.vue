@@ -3,7 +3,7 @@
     <!-- 搜索筛选 -->
     <el-form :inline="true" :model="formInline" class="user-search">
       <el-form-item label="">
-        <el-input size="small" v-model="formInline.code" placeholder="输入角色"></el-input>
+        <el-input size="small" v-model="formInline.code" maxlength="8" show-word-limit placeholder="输入角色代码"></el-input>
       </el-form-item>
       <el-form-item label="">
         <el-input size="small" v-model="formInline.name" placeholder="输入角色名称"></el-input>
@@ -15,18 +15,14 @@
     </el-form>
     <!--列表-->
     <el-table size="small" height="488" stripe :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
-      <el-table-column align="center" prop="code" label="角色" width="235">
-      </el-table-column>
-      <el-table-column align="center" prop="name" label="角色名称" width="235">
-      </el-table-column>
-      <el-table-column align="center" prop="note1" label="角色职务代码" width="235">
-      </el-table-column>
-      <el-table-column align="center" prop="note2" label="备注" width="235">
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="355">
+      <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
+      <el-table-column align="center" prop="code" label="角色代码" width="235"></el-table-column>
+      <el-table-column align="center" prop="name" label="角色名称" width="235"></el-table-column>
+      <el-table-column align="center" prop="note1" label="角色职务代码" width="235"></el-table-column>
+      <el-table-column align="center" prop="note2" label="备注" width="235"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteRole(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -36,8 +32,8 @@
     <!-- 编辑界面 -->
     <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()" class="dialog">
       <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm" class="dialogShortForm">
-        <el-form-item label="角色" prop="code">
-          <el-input size="small" v-model="editForm.code" auto-complete="off" placeholder="请输入角色" class="comWidth" :disabled="codeDis"></el-input>
+        <el-form-item label="角色代码" prop="code">
+          <el-input size="small" v-model="editForm.code" maxlength="8" show-word-limit auto-complete="off" placeholder="请输入角色代码" class="comWidth" :disabled="codeDis"></el-input>
         </el-form-item>
         <el-form-item label="角色名称" prop="name">
           <el-input size="small" v-model="editForm.name" auto-complete="off" placeholder="请输入角色名称"  class="comWidth"></el-input>
@@ -106,7 +102,7 @@ export default {
       pagination: {
         currentPage: 1,
         pageSize: 10,
-        total: 10
+        total: 0
       },
       params:{}
     }
@@ -151,7 +147,6 @@ export default {
       this.$nextTick(function () {
         this.paginationShow = true;
       })
-      this.getdata()
     },
     //显示编辑界面
     handleEdit: function(index, row) {

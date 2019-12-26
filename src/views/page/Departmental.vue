@@ -3,7 +3,7 @@
     <!-- 搜索筛选 -->
     <el-form :inline="true" :model="formInline" class="user-search">
       <el-form-item label="">
-        <el-input size="small" v-model="formInline.code" placeholder="输入部门代码"></el-input>
+        <el-input size="small" v-model="formInline.code" maxlength="12" show-word-limit placeholder="输入部门代码"></el-input>
       </el-form-item>
       <el-form-item label="">
         <el-input size="small" v-model="formInline.name" placeholder="输入部门名称"></el-input>
@@ -15,6 +15,7 @@
     </el-form>
     <!--列表-->
     <el-table size="small" :data="listData" stripe highlight-current-row v-loading="loading" border element-loading-text="拼命加载中" height="488">
+      <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
       <el-table-column align="center" prop="code" label="部门代码" width="235">
       </el-table-column>
       <el-table-column align="center" prop="name" label="部门名称" width="235">
@@ -23,10 +24,9 @@
       </el-table-column>
       <el-table-column align="center" prop="note2" label="部门撤销日期" width="235">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="355">
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteDept(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -37,7 +37,7 @@
     <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()" class="dialog">
       <el-form label-width="120px" :model="editForm" :rules="rules" ref="editForm" class="dialogShortForm">
         <el-form-item label="部门代码" prop="code">
-          <el-input size="small" v-model="editForm.code" auto-complete="off" placeholder="请输入部门代码" class="comWidth" :disabled="codeDis"></el-input>
+          <el-input size="small" maxlength="12" show-word-limit v-model="editForm.code" auto-complete="off" placeholder="请输入部门代码" class="comWidth" :disabled="codeDis"></el-input>
         </el-form-item>
         <el-form-item label="部门名称" prop="name">
           <el-input size="small" v-model="editForm.name" auto-complete="off" placeholder="请输入部门名称"  class="comWidth"></el-input>
@@ -53,23 +53,6 @@
         <el-button size="small" @click="closeDialog()">取消</el-button>
         <el-button size="small" type="primary" :loading="loading" class="title" @click="submitForm('editForm')">保存</el-button>
       </div>
-    </el-dialog>
-    <!-- 详情界面 -->
-    <el-dialog title="详情" :visible.sync="detailsFormVisible" width="30%" @click="closeDialog()" class="dialog">
-      <el-form label-width="120px" :model="editForm" ref="editForm" class="dialogShortForm">
-        <el-form-item label="部门代码" prop="code">
-          <el-input size="small" v-text="editForm.code" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称" prop="name">
-          <el-input size="small" v-text="editForm.name" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="部门设立日期" prop="note1">
-          <el-date-picker v-text="editForm.note1" :disabled="true" value-format="yyyy-MM-dd" class="comWidth"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="部门撤销日期" prop="note2">
-          <el-date-picker v-text="editForm.note2" :disabled="true" value-format="yyyy-MM-dd" class="comWidth"></el-date-picker>
-        </el-form-item>
-      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -93,7 +76,7 @@ export default {
       },
       // rules表单验证
       rules: {
-        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入部门名称', trigger: 'change' }],
         code: [{ required: true, message: '请输入部门代码', trigger: 'blur' }]
       },
       formInline: {
@@ -152,7 +135,6 @@ export default {
       this.$nextTick(function () {
         this.paginationShow = true;
       })
-      this.getdata()
     },
     //显示编辑界面
     handleEdit: function(index, row) {
@@ -172,14 +154,6 @@ export default {
         this.editForm.note1 = ''
         this.editForm.note2 = ''
       }
-    },
-    //显示详情页面
-    handleView:function(index,row){
-      this.detailsFormVisible = true
-      this.editForm.name = row.name
-      this.editForm.code = row.code
-      this.editForm.note1 = row.note1
-      this.editForm.note2 = row.note2
     },
     // 增加页面保存方法
     submitForm(editData) {
@@ -245,7 +219,7 @@ export default {
     },
     // 重置表单校验
     resetForm(formName) {
-        this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields();
     },
     // 删除部门
     deleteDept(index, row) {
@@ -286,6 +260,7 @@ export default {
     closeDialog(formRule) {
       this.editFormVisible = false
       this.detailsFormVisible = false
+      resetForm(editForm)
     },
     // 分页组件的当前页和分页变化
     handleSizeChange(val) {

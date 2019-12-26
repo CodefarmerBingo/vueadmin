@@ -3,7 +3,7 @@
     <!-- 搜索筛选 -->
     <el-form :inline="true" :model="formInline" class="user-search">
       <el-form-item label="">
-        <el-input size="small" v-model="formInline.code" placeholder="输入岗位职务代码"></el-input>
+        <el-input size="small" v-model="formInline.code" maxlength="8" show-word-limit placeholder="输入岗位职务代码"></el-input>
       </el-form-item>
       <el-form-item label="">
         <el-input size="small" v-model="formInline.name" placeholder="输入岗位职务名称"></el-input>
@@ -15,18 +15,14 @@
     </el-form>
     <!--列表-->
     <el-table size="small" height="488" stripe :data="listData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
-      <el-table-column align="center" prop="code" label="岗位职务代码" width="235">
-      </el-table-column>
-      <el-table-column align="center" prop="name" label="岗位职务名称" width="235">
-      </el-table-column>
-      <el-table-column align="center" prop="note1" label="主管岗位职务代码" width="235">
-      </el-table-column>
-      <el-table-column align="center" prop="note2" label="备注" width="235">
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="355">
+      <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
+      <el-table-column align="center" prop="code" label="岗位职务代码" width="235"></el-table-column>
+      <el-table-column align="center" prop="name" label="岗位职务名称" width="235"></el-table-column>
+      <el-table-column align="center" prop="note1" label="主管岗位职务代码" width="235"></el-table-column>
+      <el-table-column align="center" prop="note2" label="备注" width="235"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="success" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.$index, scope.row)">详情</el-button>
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="deletePosition(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -37,7 +33,7 @@
     <el-dialog :title="title" :visible.sync="editFormVisible" width="30%" @click="closeDialog()" class="dialog">
       <el-form label-width="130px" :model="editForm" :rules="rules" ref="editForm" class="dialogShortForm">
         <el-form-item label="岗位职务代码" prop="code">
-          <el-input size="small" v-model="editForm.code" auto-complete="off" placeholder="请输入岗位职务代码" class="comWidth" :disabled="codeDis"></el-input>
+          <el-input size="small" maxlength="8" show-word-limit v-model="editForm.code" auto-complete="off" placeholder="请输入岗位职务代码" class="comWidth" :disabled="codeDis"></el-input>
         </el-form-item>
         <el-form-item label="岗位职务名称" prop="name">
           <el-input size="small" v-model="editForm.name" auto-complete="off" placeholder="请输入岗位职务名称"  class="comWidth"></el-input>
@@ -54,23 +50,6 @@
         <el-button size="small" type="primary" :loading="loading" class="title" @click="submitForm('editForm')">保存</el-button>
       </div>
     </el-dialog>
-    <!-- 详情界面 -->
-    <el-dialog :title="detailsTitle" :visible.sync="detailsFormVisible" width="30%" @click="closeDialog()" class="dialog">
-      <el-form label-width="130px" :model="editForm" ref="editForm" class="dialogShortForm">
-        <el-form-item label="岗位职务代码" prop="code">
-          <el-input size="small" v-text="editForm.code" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="岗位职务名称" prop="name">
-          <el-input size="small" v-text="editForm.name" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="主管岗位职务代码" prop="note1">
-          <el-input size="small" v-text="editForm.note1" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="note2">
-          <el-input size="small" v-text="editForm.note2" :disabled="true"  class="comWidth"></el-input>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 
@@ -80,12 +59,10 @@ export default {
   data() {
     return {
       loading: false, //是显示加载
-      editFormVisible: false, //控制编辑页面显示与隐藏
-      detailsFormVisible:false, //控制详情页面显示与隐藏
+      editFormVisible: false, //控制编辑页面显示与隐
       paginationShow:true, //控制分页页面显示与否
       codeDis: false,
       title: '添加',
-      detailsTitle:'详情',
       editForm: {
         name: '',
         code: '',
@@ -106,7 +83,7 @@ export default {
       pagination: {
         currentPage: 1,
         pageSize: 10,
-        total: 10
+        total: 0
       },
       params:{}
     }
@@ -152,7 +129,6 @@ export default {
       this.$nextTick(function () {
         this.paginationShow = true;
       })
-      this.getdata()
     },
     //显示编辑界面
     handleEdit: function(index, row) {
@@ -172,14 +148,6 @@ export default {
         this.editForm.note1 = ''
         this.editForm.note2 = ''
       }
-    },
-    //显示详情页面
-    handleView:function(index,row){
-      this.detailsFormVisible = true
-      this.editForm.name = row.name
-      this.editForm.code = row.code
-      this.editForm.note1 = row.note1
-      this.editForm.note2 = row.note2
     },
     // 增加页面保存方法
     submitForm(editData) {

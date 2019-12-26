@@ -95,6 +95,8 @@ export const privilegeDelete = (params) => { return req("post", "platform-web/pe
  **/
 // 客户信息-获取数据列表
 export const customerList = (params) => { return req("post", "platform-web/customer/page", params) };
+// 客户信息-修改关键字
+export const modifyKeyWord = (keyWord,rowId) => { return req("post", "platform-web/customer/keyword?keyWord=" + keyWord + '&rowId=' + rowId) };
 
 /**
  * 报表图形

@@ -36,10 +36,6 @@
       </el-table-column>
       <el-table-column align="center" prop="connectionRate" label="接通率" width="70">
       </el-table-column>
-      <el-table-column align="center" prop="callTime" label="呼入时长" width="70">
-      </el-table-column>
-      <el-table-column align="center" prop="queueTime" label="坐席时长" width="70">
-      </el-table-column>
       <el-table-column align="center" prop="avgCallInTIme" label="平均呼入时间" width="100">
       </el-table-column>
       <el-table-column align="center" prop="answerNo" label="坐席未接数量" width="100">
@@ -249,7 +245,7 @@ export default {
         value: 13,
         label: '小时'
       }],
-      areaValue: 1,
+      areaValue: 0,
       timeValue: 10,
       params:{}
     }
@@ -304,7 +300,6 @@ export default {
       this.$nextTick(function () {
         this.reportPaginationShow = true;
       })
-      this.getdata()
     },
     // 显示详情页
     handleView:function(index,row){

@@ -12,7 +12,8 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/platform-web': {
-              target: 'http://172.30.16.37:9081',
+              target: 'http://172.30.16.38:9081',  // 调试地址
+              // target: 'http://192.168.28.47:9081',  // 打包地址
               changeOrigin: true,
               pathRewrite: {
                 '^/platform-web': '/platform-web'
