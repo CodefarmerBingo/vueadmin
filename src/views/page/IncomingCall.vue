@@ -3,7 +3,7 @@
     <!-- 搜索筛选 -->
     <el-form :inline="true" :model="callFormInline" class="user-search">
       <el-form-item>
-        <el-input size="small" v-model="callFormInline.flowNo" placeholder="输入流水号"></el-input>
+        <el-input size="small" v-model="callFormInline.flowNo" placeholder="输入呼叫流水号"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input size="small" v-model="callFormInline.region" placeholder="输入地区代码"></el-input>
@@ -23,6 +23,7 @@
     </el-form>
     <!--列表-->
     <el-table size="small" height="490" stripe ref="configurationTable" :data="callListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
       <el-table-column align="center" prop="monthNo" label="日期段" width="60">
       </el-table-column>
       <el-table-column align="center" prop="flowNo" label="呼叫流水号" width="150">

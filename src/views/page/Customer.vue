@@ -27,9 +27,6 @@
         <el-input size="small" v-model="customerFormInline.custCode" placeholder="输入客户编码"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button size="small" type="primary" icon="el-icon-refresh" @click="refresh">清空</el-button>
-      </el-form-item>
-      <el-form-item>
         <el-button size="small" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
       </el-form-item>
       <el-form-item>
@@ -38,6 +35,7 @@
     </el-form>
     <!--列表-->
     <el-table size="small" height="402" @row-click="handleRowChange" ref="configurationTable" stripe :data="customerListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
       <el-table-column align="center" prop="customerId" label="客户编号" width="160">
       </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称" width="230">
@@ -219,22 +217,7 @@ export default {
       this.pagination.currentPage = val
       this.getdata()
     },
-    // 清空搜索条件
-    refresh(){
-      this.customerFormInline.keyWord = ''
-      this.customerFormInline.customerId = ''
-      this.customerFormInline.customerName = ''
-      this.customerFormInline.address = ''
-      this.customerFormInline.custTelephone = ''
-      this.customerFormInline.region = ''
-      this.customerFormInline.provinceAndCity = ''
-      this.customerFormInline.tradeName = ''
-      this.customerFormInline.industryName = ''
-      this.customerFormInline.aliasName = ''
-      this.customerFormInline.custCode = ''
-      this.customerFormInline.updateTime = ''
-    },
-    // 点击行下方显示详情
+    // 点击列表行下方显示详情
     handleRowChange(row){
       this.customerEditForm.keyWord = row.keyWord
       this.customerEditForm.rrwId = row.rrwId

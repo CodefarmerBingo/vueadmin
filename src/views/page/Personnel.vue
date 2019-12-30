@@ -44,6 +44,7 @@
         </el-form>
         <!-- 员工设置列表-->
         <el-table size="small" height="460" stripe ref="configurationTable" :data="personnelListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+          <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
           <el-table-column align="center" prop="region" label="地区代码/名称" width="150">
           </el-table-column>
           <el-table-column align="center" prop="dept" label="部门代码/名称" width="250">
@@ -119,6 +120,7 @@
         </el-form>
         <!-- 岗位变动历史列表 -->
         <el-table size="small" height="460" stripe ref="historyConfigurationTable" :data="historyListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+          <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
           <el-table-column align="center" prop="startTime" label="开始时间" width="90">
           </el-table-column>
           <el-table-column align="center" prop="endTime" label="结束时间" width="90">
@@ -168,7 +170,10 @@
           <el-input size="small" v-model="personnelEditForm.line" maxlength="4" show-word-limit auto-complete="off" placeholder="请输入显示次序" class="comWidth"></el-input>
         </el-form-item>
         <el-form-item label="岗位职务代码" prop="position">
-          <el-input size="small" v-model="personnelEditForm.position" maxlength="8" show-word-limit auto-complete="off" placeholder="请输入岗位职务代码" class="comWidth"></el-input>
+          <el-select v-model="deptOption" placeholder="请选择" class="selectWidth">
+            <el-option size="small" v-for="item in deptOptions" :key="item.code" :label="item.label" :value="item.code"></el-option>
+          </el-select>
+          <!-- <el-input size="small" v-model="personnelEditForm.position" maxlength="8" show-word-limit auto-complete="off" placeholder="请输入岗位职务代码" class="comWidth"></el-input> -->
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input size="small" v-model="personnelEditForm.name" auto-complete="off" placeholder="请输入姓名" class="comWidth"></el-input>
@@ -283,7 +288,7 @@
 </template>
 
 <script>
-import { personnelList, personnelSave, personnelDelete, personnelView, personnelUpdate, historyList, historySave, historyDelete, historyView, historyUpdate } from '@/api/commonMG'
+import { personnelList, personnelSave, personnelDelete, personnelView, personnelUpdate, historyList, historySave, historyDelete, historyView, historyUpdate, postList } from '@/api/commonMG'
 export default {
   data() {
     return {
@@ -298,6 +303,8 @@ export default {
       historyCodeDis: false,
       tabPosition: 'top',
       activeName: '员工设置',
+      deptOptions: [],
+      deptOption: '',
       personnelEditForm: {
         region: '',
         dept: '',
@@ -439,6 +446,7 @@ export default {
   },
   created() {
     this.getdata()
+    this.getDeptOptions()
   },
 
   /**
@@ -508,7 +516,7 @@ export default {
       this.personnelEditForm.region = ''
       this.personnelEditForm.dept = ''
       this.personnelEditForm.line = ''
-      this.personnelEditForm.position = ''
+      this.personnelEditForm.position = this.deptOptions[0].code
       this.personnelEditForm.name = ''
       this.personnelEditForm.engName = ''
       this.personnelEditForm.code = ''
@@ -656,7 +664,6 @@ export default {
     closeDialog() {
       this.personnelEditFormVisible = false
       this.personnelDetailsFormVisible = false
-      // this.$refs[personnelEditForm].resetFields();
     },
     // 分页组件的当前页和分页变化
     handleSizeChange(val) {
@@ -666,6 +673,15 @@ export default {
     handleCurrentChange(val) {
       this.pagination.currentPage = val
       this.getdata()
+    },
+    getDeptOptions(){
+      let params = {currentPage:1,pageSize:100}
+      postList(params).then(res => {
+        this.deptOptions = res.result
+        this.deptOption = this.deptOptions[0].code
+      }).catch(error => {
+        console.log(error)
+      })
     },
 
     // 岗位变动历史页面方法
@@ -755,6 +771,12 @@ export default {
 <style scoped>
 .dialog /deep/ .historyForm{
   height: 320px
+}
+.selectWidth /deep/ .el-select {
+  width: 240px
+}
+.selectWidth /deep/ .el-input__inner {
+  width: 240px
 }
 </style>
 

@@ -64,18 +64,22 @@ export default {
 .aside {
   width: 64px !important;
   height: 100%;
-  background-color: #334157;
+  background-color: #fff;
   margin: 0px;
 }
 .asideshow {
   width: 200px !important;
   height: 100%;
-  background-color: #334157;
+  /* background-color: #30426a; */
   margin: 0px;
 }
 .index-header,
 .index-main {
   padding: 0px;
-  border-left: 2px solid #333;
+  background: #fff;
+}
+.el-main {
+  background-color: #eaeff5;
+  box-sizing: border-box
 }
 </style>

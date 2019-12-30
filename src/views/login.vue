@@ -1,28 +1,31 @@
 <template>
   <div class="login-wrap">
+    <img src="../assets/img/title.png" class="titleImage">
+    <img src="../assets/img/light.png" class="lightImage">
     <el-form label-position="left" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm login-container">
       <h3 class="title">用户登录</h3>
       <el-form-item prop="username">
-        <el-input type="text" v-model="ruleForm.username" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="ruleForm.username" prefix-icon="el-icon-s-custom" auto-complete="off" placeholder="请输入用户名" class="inputClass"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password" auto-complete="off" placeholder="密码"></el-input>
+          <el-input type="password" v-model="ruleForm.password" prefix-icon="el-icon-lock" auto-complete="off" placeholder="请输入用户密码" class="inputClass"></el-input>
       </el-form-item>
-      <el-row>
-        <el-col :span="12">
+      <el-row class="rowClass">
+        <el-col :span="10" :offset="2">
           <el-form-item prop="code">
-            <el-input type="text" v-model="ruleForm.code" auto-complete="off" placeholder="图形验证码" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+            <el-input type="text" v-model="ruleForm.code" prefix-icon="el-icon-picture" class="yanzhengma" auto-complete="off" placeholder="请输入验证码" @keyup.enter.native="submitForm('ruleForm')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" class="code-box">
+        <el-col :span="10" class="code-box">
           <img :src="ruleForm.codeimg" alt="" class="codeimg" @click="getcode()">
         </el-col>
       </el-row>
       <el-checkbox class="remember" v-model="rememberpwd">记住密码</el-checkbox>
-      <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click="submitForm('ruleForm')" :loading="logining">登录</el-button>
+      <el-form-item>
+        <el-button class="submitButton" type="primary" @click="submitForm('ruleForm')" :loading="logining">登录</el-button>
       </el-form-item>
     </el-form>
+    <img src="../assets/img/shadow.png" class="shadowImage">
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -129,34 +132,84 @@ export default {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  padding-top: 10%;
-  background-color: #112346;
+  background-image: url(../assets/img/BJ.jpg);
   background-repeat: no-repeat;
-  background-position: center right;
   background-size: 100%;
 }
+.login-wrap /deep/ .el-form-item__error{
+  margin-left: 28px
+}
+.login-wrap .rowClass /deep/ .el-form-item__error{
+  margin-left: 0px
+}
+.titleImage {
+  width: 500px;
+  margin: 130px 0 10px 520px
+}
+.lightImage{
+  margin-left: 570px;
+  width: 400px;
+  margin-bottom: 50px
+}
+.shadowImage{
+  margin-left: 37%;
+  margin-top: -20px;
+  width: 400px
+}
 .login-container {
-  border-radius: 10px;
   margin: 0px auto;
-  width: 350px;
+  box-sizing: border-box;
+  width: 400px;
+  height: 380px;
   padding: 30px 35px 15px 35px;
-  background: #fff;
-  border: 1px solid #eaeaea;
-  text-align: left;
-  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
+  background: #e7f3ff;
 }
 .title {
-  margin: 0px auto 40px auto;
+  margin: 0px auto 30px auto;
+  font-size: 30px;
   text-align: center;
-  color: #505458;
+  font-weight: normal;
+  color: #3350d8;
+}
+.rowClass {
+  padding-left: 2px
+}
+.inputClass {
+  width: 280px;
+  margin-left:30px;
+}
+.inputClass /deep/ .el-input__inner {
+  background-color: #e7f3ff;
+  border: 1px solid #9ea2fc;
+  height: 33px;
+}
+.inputClass /deep/ .el-input__inner::placeholder {
+ color: #9ea4f8
 }
 .remember {
-  margin: 0px 0px 35px 0px;
+  margin: 10px 0px 20px 28px;
 }
 .code-box {
   text-align: right;
+  margin-left: 4px;
 }
 .codeimg {
-  height: 40px;
+  height: 33px;
+  width: 100px;
+  margin: 4px -2px 0 0;
+}
+.submitButton {
+  width: 280px;
+  margin-left: 28px;
+  height: 42px;
+  font-size: 20px;
+  background-color: #6177ef;
+}
+.yanzhengma /deep/ .el-input__inner{
+  border: 1px solid #9ea2fc;
+  height: 33px;
+}
+.yanzhengma /deep/ .el-input__inner::placeholder{
+  color: #9ea4f8
 }
 </style>

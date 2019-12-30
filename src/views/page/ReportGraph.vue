@@ -24,6 +24,7 @@
     </el-form>
     <!--列表-->
     <el-table size="small" height="490" stripe ref="configurationTable" :data="reportListData" highlight-current-row v-loading="loading" border element-loading-text="拼命加载中">
+      <el-table-column label="序号" type="index" width="60" align="center"></el-table-column>
       <el-table-column align="center" prop="ttime" label="时间" width="120">
       </el-table-column>
       <el-table-column align="center" prop="provinceCode" label="地区代码" width="70">
@@ -276,7 +277,7 @@ export default {
         if(res.success){
           this.reportListData = res.result;
           this.pagination.total = res.total
-          this.$refs.configurationTable.$el.style.width = '98%'
+          this.$refs.configurationTable.$el.style.width = '99.1%'
         }else{
           if(res.code == '403'){
             this.$message({

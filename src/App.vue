@@ -39,4 +39,7 @@ body .el-table th.gutter{
 .el-form-item__error {
   padding-top: 0px;
 }
+.el-submenu__title {
+  color: red
+}
 </style>
